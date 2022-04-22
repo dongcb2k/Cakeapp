@@ -1,4 +1,4 @@
-import 'package:cakeapp/constants/gaps.dart';
+import 'package:cakeapp/presentation/constants/gaps.dart';
 import 'package:flutter/material.dart';
 
 class DetailsScreen extends StatelessWidget {

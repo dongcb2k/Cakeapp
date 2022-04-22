@@ -1,7 +1,14 @@
-import 'package:cakeapp/screen/main_screen.dart';
+import 'package:cakeapp/presentation/di/app_module.dart';
+import 'package:cakeapp/presentation/screen/main_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
-void main() {
+var logger = Logger(
+  printer: PrettyPrinter(),
+);
+
+Future<void> main() async {
+  configureDependencies();
   runApp(const MyApp());
 }
 

@@ -1,7 +1,8 @@
-import 'package:cakeapp/constants/gaps.dart';
+import 'package:cakeapp/presentation/constants/gaps.dart';
 import 'package:flutter/material.dart';
 
-import '../detail/details_screen.dart';
+import '../screen/detail/details_screen.dart';
+
 
 class CakeCard extends StatefulWidget {
 

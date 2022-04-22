@@ -1,7 +1,10 @@
+import 'package:cakeapp/presentation/di/app_module.dart';
+import 'package:cakeapp/presentation/screen/cart/bloc/cart_bloc.dart';
+import 'package:cakeapp/presentation/screen/user/user_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'cart/cart_screen.dart';
-import 'detail/details_screen.dart';
 import 'home/home_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -12,11 +15,15 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final _cartBloc = getIt<CartBloc>();
+
   int _selectedIndex = 0;
   final pages = [
     const HomeScreen(),
-    const CartScreen(listCart: ['1', '2', '3', '4'],),
-    const DetailsScreen(),
+    const CartScreen(
+      listCart: ['1', '2', '3', '4'],
+    ),
+    const UserScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -27,10 +34,13 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: pages[_selectedIndex],
-      bottomNavigationBar: _buildBottomNavigationBar(),
+    return BlocProvider(
+      create: (context) => _cartBloc,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: pages[_selectedIndex],
+        bottomNavigationBar: _buildBottomNavigationBar(),
+      ),
     );
   }
 

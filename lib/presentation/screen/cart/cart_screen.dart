@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cakeapp/constants/res/dimens.dart';
-import 'package:cakeapp/constants/utils.dart';
+import 'package:cakeapp/presentation/constants/res/dimens.dart';
+import 'package:cakeapp/presentation/constants/utils.dart';
 import 'package:flutter/material.dart';
 
-import '../../constants/gaps.dart';
+import 'package:cakeapp/presentation/constants/gaps.dart';
+
 import '../../constants/res/colors.dart';
 
 class CartScreen extends StatefulWidget {
@@ -29,11 +30,11 @@ class _CartScreenState extends State<CartScreen> {
         child: Column(
           children: [
             Expanded(
-              flex: 4,
+              flex: 5,
               child: _buildListCart(widget.listCart),
             ),
             const Expanded(
-              flex: 3,
+              flex: 4,
               child: Payment(),
             )
           ],
@@ -48,32 +49,32 @@ class _CartScreenState extends State<CartScreen> {
       itemBuilder: (context, index) {
         return Card(
           color: blackBlue,
-          margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
                   child: ImagesItem(
                       urlImage: 'https://www.linkpicture.com/q/ocean.jpg'),
                 ),
-                Gaps.wGap15,
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Title(title: 'Chocolate latteee'),
-                      const Price(price: '15'),
-                      _buildQuantity(),
-                    ],
-                  ),
+              ),
+              Gaps.wGap15,
+              Expanded(
+                flex: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Title(title: 'Chocolate latteee'),
+                    const Price(price: '15'),
+                    _buildQuantity(),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
@@ -84,10 +85,72 @@ class _CartScreenState extends State<CartScreen> {
     return Row(
       children: const [
         IconButton(
-            onPressed: null, icon: Icon(Icons.add_circle, color: Colors.white)),
+          onPressed: null,
+          icon: Icon(Icons.add_circle, color: Colors.white),
+        ),
         Text('1', style: TextStyle(color: Colors.white)),
         IconButton(
-            onPressed: null, icon: Icon(Icons.add_circle, color: Colors.white)),
+          onPressed: null,
+          icon: Icon(Icons.add_circle, color: Colors.white),
+        ),
+      ],
+    );
+  }
+}
+
+class Price extends StatelessWidget {
+  const Price({Key? key, required this.price}) : super(key: key);
+
+  final String price;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 10.0),
+      child: RichText(
+        text: TextSpan(
+          children: [
+            const TextSpan(
+                text: r'$ ',
+                style: TextStyle(color: orange, fontSize: textSize18)),
+            TextSpan(
+              text: price,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: textSize18,
+                  fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Title extends StatelessWidget {
+  const Title({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 160,
+          child: Text(
+            title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(color: Colors.white, fontSize: textSize18),
+          ),
+        ),
+        const IconButton(
+          onPressed: null,
+          icon: Icon(Icons.clear, color: Colors.white),
+        ),
       ],
     );
   }
@@ -119,72 +182,17 @@ class ImagesItem extends StatelessWidget {
   }
 }
 
-class Price extends StatelessWidget {
-  const Price({Key? key, required this.price}) : super(key: key);
-
-  final String price;
-
-  @override
-  Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-        children: [
-          const TextSpan(
-              text: r'$ ',
-              style: TextStyle(color: orange, fontSize: textSize18)),
-          TextSpan(
-            text: price,
-            style: const TextStyle(
-                color: Colors.white,
-                fontSize: textSize18,
-                fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Title extends StatelessWidget {
-  const Title({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 160,
-          child: Text(
-            title,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(color: Colors.white, fontSize: textSize18),
-          ),
-        ),
-        const IconButton(
-          onPressed: null,
-          icon: Icon(Icons.clear, color: Colors.white),
-        ),
-      ],
-    );
-  }
-}
-
 class Payment extends StatelessWidget {
   const Payment({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 40.0, right: 40.0, top: 20.0),
+      padding: const EdgeInsets.only(left: 40.0, right: 40.0, top: 15.0),
       decoration: const BoxDecoration(
           color: blackBlue,
           borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
+              topLeft: Radius.circular(40.0), topRight: Radius.circular(40.0))),
       child: Column(
         children: [
           _buildPromo(context),
@@ -205,6 +213,7 @@ class Payment extends StatelessWidget {
 
   Widget _buildButtonPay() {
     return SizedBox(
+      height: 45,
       width: double.infinity,
       child: OutlinedButton(
         onPressed: null,
@@ -278,7 +287,8 @@ class Payment extends StatelessWidget {
                 leading: CachedNetworkImage(
                   imageUrl: 'https://www.linkpicture.com/q/matcha2.jpg',
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => const CircularProgressIndicator(),
+                  placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),

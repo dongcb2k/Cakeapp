@@ -1,8 +1,11 @@
-import 'package:cakeapp/constants/gaps.dart';
-import 'package:cakeapp/screen/home/special_cake_card.dart';
+import 'package:cakeapp/presentation/constants/gaps.dart';
+import 'package:cakeapp/presentation/screen/cart/bloc/cart_bloc.dart';
+import 'package:cakeapp/presentation/widgets/special_cake_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'cake_card.dart';
+import '../../widgets/cake_card.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,6 +18,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final cart = context.watch<CartBloc>();
+    
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
