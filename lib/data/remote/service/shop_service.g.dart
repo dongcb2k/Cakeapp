@@ -16,21 +16,20 @@ class _ShopService implements ShopService {
   String? baseUrl;
 
   @override
-  Future<ApiResponse<CakeResponse>> getCakeItem() async {
+  Future<List<CakeResponse>> getCakeItem() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ApiResponse<CakeResponse>>(
+    final _result = await _dio.fetch<List<dynamic>>(
+        _setStreamType<List<CakeResponse>>(
             Options(method: 'GET', headers: _headers, extra: _extra)
                 .compose(_dio.options, '2f1cc49c-0985-4c0f-8b40-15ff4a4da470',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = ApiResponse<CakeResponse>.fromJson(
-      _result.data!,
-      (json) => CakeResponse.fromJson(json as Map<String, dynamic>),
-    );
+    var value = _result.data!
+        .map((dynamic i) => CakeResponse.fromJson(i as Map<String, dynamic>))
+        .toList();
     return value;
   }
 

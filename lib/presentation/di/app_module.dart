@@ -6,10 +6,10 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import 'app_module.config.dart';
 
-final getIt = GetIt.instance;
+final sl = GetIt.instance;
 
 @InjectableInit()
-GetIt configureDependencies() => $initGetIt(getIt);
+Future<void> configureDependencies() async => await $initGetIt(sl);
 
 @module
 abstract class AppModule {

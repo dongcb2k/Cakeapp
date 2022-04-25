@@ -7,11 +7,11 @@ part of 'cake.dart';
 // **************************************************************************
 
 CakeResponse _$CakeResponseFromJson(Map<String, dynamic> json) => CakeResponse(
-      id: json['id'] as int?,
-      name: json['name'] as String?,
-      image: json['image'] as String?,
-      ingredient: json['ingredient'] as String?,
-      price: json['price'] as int?,
+      id: json['id'] as int,
+      name: json['name'] as String,
+      image: json['image'] as String,
+      ingredient: json['ingredient'] as String,
+      price: json['price'] as int,
     );
 
 Map<String, dynamic> _$CakeResponseToJson(CakeResponse instance) =>

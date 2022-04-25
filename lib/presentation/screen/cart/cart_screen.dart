@@ -25,6 +25,15 @@ class _CartScreenState extends State<CartScreen> {
         title: const Text('My Cart'),
         backgroundColor: Colors.black,
         centerTitle: true,
+        actions: [
+          GestureDetector(
+            onTap: () {},
+            child: const Icon(
+              Icons.search,
+              size: 26.0,
+            ),
+          )
+        ],
       ),
       body: SafeArea(
         child: Column(

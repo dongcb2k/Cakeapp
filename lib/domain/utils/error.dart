@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class AppError extends Equatable {
@@ -25,6 +28,13 @@ class OtherFailure extends AppError {
 
 class NetworkError extends AppError {
   const NetworkError([String message = '']) : super(message);
+}
+
+AppError getError(dynamic error) {
+  if (error is DioError && error.error is SocketException) {
+    return const NetworkError('Network Error');
+  }
+  return const OtherFailure('Common Error');
 }
 
 const commonError = OtherFailure('');

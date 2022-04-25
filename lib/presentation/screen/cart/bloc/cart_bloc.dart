@@ -8,5 +8,4 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc() : super(CartState()) {
     on<AddItemEvent>((event, emit) => null);
   }
-
 }

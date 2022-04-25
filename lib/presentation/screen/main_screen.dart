@@ -1,6 +1,6 @@
 import 'package:cakeapp/presentation/di/app_module.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_bloc.dart';
-import 'package:cakeapp/presentation/screen/user/user_screen.dart';
+import 'package:cakeapp/presentation/screen/shop/shop_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,16 +15,9 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final _cartBloc = getIt<CartBloc>();
+  final _cartBloc = sl<CartBloc>();
 
   int _selectedIndex = 0;
-  final pages = [
-    const HomeScreen(),
-    const CartScreen(
-      listCart: ['1', '2', '3', '4'],
-    ),
-    const UserScreen(),
-  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -34,6 +27,14 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final pages = [
+      const HomeScreen(),
+      ShopScreen(cartBloc: context.read<CartBloc>()),
+      const CartScreen(
+        listCart: ['1', '2', '3', '4'],
+      ),
+    ];
+
     return BlocProvider(
       create: (context) => _cartBloc,
       child: Scaffold(
@@ -54,7 +55,7 @@ class _MainScreenState extends State<MainScreen> {
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
         BottomNavigationBarItem(icon: Icon(Icons.shopping_bag), label: ""),
-        BottomNavigationBarItem(icon: Icon(Icons.notifications), label: ""),
+        BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: ""),
       ],
       currentIndex: _selectedIndex,
       onTap: _onItemTapped,

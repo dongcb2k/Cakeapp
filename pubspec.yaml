@@ -12,8 +12,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  build_runner:
-
   # https://pub.dev/packages/injectable
   injectable: ^1.5.3
 
@@ -36,8 +34,6 @@ dependencies:
   # Support rest full api
   dio: ^4.0.4
 
-  flutter_svg: ^0.22.0
-
   flutter_lints: ^1.0.4
 
   cupertino_icons: ^1.0.2
@@ -55,9 +51,16 @@ dependencies:
   pretty_dio_logger: ^1.2.0-beta-1
   logger: any  #for logging purpose
 
+  # route navigation
+  # https://pub.dev/packages/auto_route
+  auto_route: ^3.2.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  build_runner:
+  auto_route_generator: ^3.2.3
 
 flutter:
 

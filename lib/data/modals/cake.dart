@@ -13,19 +13,19 @@ class CakeResponse {
   });
 
   @JsonKey(name: 'id')
-  int? id;
+  int id;
 
   @JsonKey(name: 'name')
-  String? name;
+  String name;
 
   @JsonKey(name: 'image')
-  String? image;
+  String image;
 
   @JsonKey(name: 'ingredient')
-  String? ingredient;
+  String ingredient;
 
   @JsonKey(name: 'price')
-  int? price;
+  int price;
 
   factory CakeResponse.fromJson(Map<String, dynamic> json) => _$CakeResponseFromJson(json);
 

@@ -6,12 +6,12 @@ import 'package:either_dart/src/either.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class GetShopItemUseCase extends WithoutParamUseCase<CakeResponse> {
+class GetShopItemUseCase extends WithoutParamUseCase<List<CakeResponse>> {
   GetShopItemUseCase(this._shopRepository);
 
   final ShopRepository _shopRepository;
 
   @override
-  Future<Either<AppError, CakeResponse>> execute() =>
+  Future<Either<AppError, List<CakeResponse>>> execute() =>
       _shopRepository.getCakeItem();
 }
