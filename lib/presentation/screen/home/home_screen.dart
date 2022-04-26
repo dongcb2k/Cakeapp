@@ -1,5 +1,5 @@
 import 'package:cakeapp/presentation/constants/gaps.dart';
-import 'package:cakeapp/presentation/widgets/special_cake_card.dart';
+import 'package:cakeapp/presentation/widgets/list_cake_card.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/cake_card.dart';
@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Gaps.hGap20,
-            const SpecialCakeCard(listCake: [],),
+            const ListCakeCard(listCake: [],),
           ],
         ),
       ),

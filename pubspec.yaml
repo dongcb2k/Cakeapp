@@ -19,9 +19,6 @@ dependencies:
   # https://pub.dev/packages/injectable_generator
   injectable_generator: ^1.5.3
 
-  # https://pub.dev/packages/cached_network_image:
-  cached_network_image: ^3.2.0
-
   # Support generate for retrofit
   # https://pub.dev/packages/json_serializable
   retrofit_generator:
@@ -30,13 +27,6 @@ dependencies:
   # State management
   # https://pub.dev/packages/flutter_bloc/install
   flutter_bloc: ^8.0.1
-
-  # Support rest full api
-  dio: ^4.0.4
-
-  flutter_lints: ^1.0.4
-
-  cupertino_icons: ^1.0.2
 
   # https://github.com/Sky24n/sp_util
   sp_util: ^2.0.3
@@ -47,13 +37,25 @@ dependencies:
   # https://pub.dev/packages/equatable
   equatable: ^2.0.0
 
+  # route navigation
+  # https://pub.dev/packages/auto_route
+  auto_route: ^3.2.4
+
+  # Support rest full api
+  dio: ^4.0.4
+
   # https://pub.dev/packages/pretty_dio_logger
   pretty_dio_logger: ^1.2.0-beta-1
   logger: any  #for logging purpose
 
-  # route navigation
-  # https://pub.dev/packages/auto_route
-  auto_route: ^3.2.4
+  # https://pub.dev/packages/cached_network_image:
+  cached_network_image: ^3.2.0
+
+  flutter_lints: ^1.0.4
+
+  cupertino_icons: ^1.0.2
+
+  flutter_svg: ^1.0.3
 
 dev_dependencies:
   flutter_test:

@@ -15,8 +15,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final _cartBloc = sl<CartBloc>();
-
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -30,13 +28,11 @@ class _MainScreenState extends State<MainScreen> {
     final pages = [
       const HomeScreen(),
       ShopScreen(cartBloc: context.read<CartBloc>()),
-      const CartScreen(
-        listCart: ['1', '2', '3', '4'],
-      ),
+      CartScreen(),
     ];
 
     return BlocProvider(
-      create: (context) => _cartBloc,
+      create: (context) => sl<CartBloc>(),
       child: Scaffold(
         backgroundColor: Colors.black,
         body: pages[_selectedIndex],

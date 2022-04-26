@@ -8,4 +8,13 @@ class Utils{
     height: 1,
     color: Colors.white,
   );
+
+}
+
+class NavigatorUtils {
+
+  static Future<dynamic> pushWidget(BuildContext context, WidgetBuilder builder) {
+    return Navigator.of(context)
+        .push<dynamic>(MaterialPageRoute<dynamic>(builder: builder));
+  }
 }

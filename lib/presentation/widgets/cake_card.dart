@@ -1,8 +1,6 @@
 import 'package:cakeapp/presentation/constants/gaps.dart';
 import 'package:flutter/material.dart';
 
-import '../screen/detail/details_screen.dart';
-
 
 class CakeCard extends StatefulWidget {
 
@@ -39,7 +37,7 @@ class _CakeCardState extends State<CakeCard> {
         itemCount: images.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () => _navigateDetailItem(context),
+            onTap: () => {},
             child: Row(
               children: [
                 Container(
@@ -124,10 +122,5 @@ class _CakeCardState extends State<CakeCard> {
         },
       ),
     );
-  }
-
-  Future<dynamic> _navigateDetailItem(BuildContext context) {
-    return Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const DetailsScreen()));
   }
 }

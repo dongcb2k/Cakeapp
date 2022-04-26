@@ -8,15 +8,15 @@ import 'package:cakeapp/presentation/constants/gaps.dart';
 import '../../constants/res/colors.dart';
 
 class CartScreen extends StatefulWidget {
-  final List<String> listCart;
 
-  const CartScreen({Key? key, required this.listCart}) : super(key: key);
+  CartScreen({Key? key}) : super(key: key);
 
   @override
   _CartScreenState createState() => _CartScreenState();
 }
 
 class _CartScreenState extends State<CartScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +40,7 @@ class _CartScreenState extends State<CartScreen> {
           children: [
             Expanded(
               flex: 5,
-              child: _buildListCart(widget.listCart),
+              child: _buildListCart(),
             ),
             const Expanded(
               flex: 4,
@@ -52,7 +52,7 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  ListView _buildListCart(List<String> listCart) {
+  ListView _buildListCart() {
     return ListView.builder(
       itemCount: 4,
       itemBuilder: (context, index) {

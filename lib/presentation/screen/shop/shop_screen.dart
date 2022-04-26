@@ -1,11 +1,12 @@
 import 'package:cakeapp/data/modals/cake.dart';
-import 'package:cakeapp/main.dart';
+import 'package:cakeapp/presentation/constants/utils.dart';
 import 'package:cakeapp/presentation/di/app_module.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_bloc.dart';
+import 'package:cakeapp/presentation/screen/cart/cart_screen.dart';
 import 'package:cakeapp/presentation/screen/shop/bloc/shop_bloc.dart';
 import 'package:cakeapp/presentation/screen/shop/bloc/shop_event.dart';
 import 'package:cakeapp/presentation/screen/shop/bloc/shop_state.dart';
-import 'package:cakeapp/presentation/widgets/special_cake_card.dart';
+import 'package:cakeapp/presentation/widgets/list_cake_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -55,7 +56,9 @@ class _ShopItemState extends State<ShopItem> {
           centerTitle: true,
           actions: [
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                NavigatorUtils.pushWidget(context, (context) => CartScreen());
+              },
               child: const Icon(
                 Icons.shopping_cart,
                 color: Colors.white,
@@ -66,8 +69,8 @@ class _ShopItemState extends State<ShopItem> {
         ),
         body: BlocBuilder<ShopBloc, ShopState>(
           bloc: _shopBloc,
+          buildWhen: (p, v) => p.listCake != v.listCake,
           builder: (context, state) {
-            logger.d('LIST DATA ' + state.listCake.toString());
             return ListItem(listCake: state.listCake);
           },
         ),
@@ -82,6 +85,6 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SpecialCakeCard(listCake: listCake ?? []);
+    return ListCakeCard(listCake: listCake ?? []);
   }
 }
