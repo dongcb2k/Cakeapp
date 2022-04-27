@@ -21,7 +21,6 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
 
     if (res.isRight) {
       final data = res.right;
-      logger.d('RESPONSE ' + data.toString());
       emit(state.copyWith(listCake: data));
     } else {
       logger.d("FAIL");

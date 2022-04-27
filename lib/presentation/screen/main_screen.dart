@@ -27,7 +27,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final pages = [
       const HomeScreen(),
-      ShopScreen(cartBloc: context.read<CartBloc>()),
+      ShopScreen(),
       CartScreen(),
     ];
 

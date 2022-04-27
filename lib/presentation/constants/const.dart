@@ -1,0 +1,1 @@
+const KEY_CART = 'get_cart';

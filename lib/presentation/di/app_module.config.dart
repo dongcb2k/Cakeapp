@@ -34,10 +34,10 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       _i9.ShopRepositoryImpl(get<_i7.ShopService>()));
   gh.factory<_i10.GetShopItemUseCase>(
       () => _i10.GetShopItemUseCase(get<_i8.ShopRepository>()));
-  gh.factory<_i11.ShopBloc>(
-      () => _i11.ShopBloc(get<_i10.GetShopItemUseCase>()));
-  gh.factory<_i12.CartBloc>(
-      () => _i12.CartBloc(get<_i10.GetShopItemUseCase>()));
+  gh.factory<_i11.ShopBloc>(() =>
+      _i11.ShopBloc(get<_i10.GetShopItemUseCase>()));
+  gh.factory<_i12.CartBloc>(() =>
+      _i12.CartBloc(get<_i10.GetShopItemUseCase>(), get<_i5.LocalData>()));
   return get;
 }
 

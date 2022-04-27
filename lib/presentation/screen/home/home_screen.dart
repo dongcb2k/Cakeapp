@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Gaps.hGap20,
-            const ListCakeCard(listCake: [],),
+            ListCakeCard(listCake: const [],),
           ],
         ),
       ),

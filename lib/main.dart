@@ -4,12 +4,16 @@ import 'package:cakeapp/presentation/screen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
+import 'package:sp_util/sp_util.dart';
 
 var logger = Logger(
   printer: PrettyPrinter(),
 );
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SpUtil.getInstance();
+  SpUtil.clear();
   await configureDependencies();
   runApp(MyApp());
 }

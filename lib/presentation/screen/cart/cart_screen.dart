@@ -1,61 +1,74 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cakeapp/presentation/constants/res/dimens.dart';
+import 'package:cakeapp/presentation/res/dimens.dart';
 import 'package:cakeapp/presentation/constants/utils.dart';
+import 'package:cakeapp/presentation/screen/cart/bloc/cart_bloc.dart';
+import 'package:cakeapp/presentation/screen/cart/bloc/cart_event.dart';
+import 'package:cakeapp/presentation/screen/cart/bloc/cart_state.dart';
+import 'package:cakeapp/presentation/widgets/image_from_url.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cakeapp/presentation/constants/gaps.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../constants/res/colors.dart';
+import '../../di/app_module.dart';
+import '../../res/colors.dart';
 
 class CartScreen extends StatefulWidget {
-
   CartScreen({Key? key}) : super(key: key);
+
+  final _cartBloc = sl<CartBloc>();
 
   @override
   _CartScreenState createState() => _CartScreenState();
 }
 
 class _CartScreenState extends State<CartScreen> {
+  @override
+  void initState() {
+    super.initState();
+    widget._cartBloc.add(GetAllCartEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: const Text('My Cart'),
-        backgroundColor: Colors.black,
-        centerTitle: true,
-        actions: [
-          GestureDetector(
-            onTap: () {},
-            child: const Icon(
-              Icons.search,
-              size: 26.0,
+    return BlocProvider(
+        create: (_) => widget._cartBloc,
+        child: Scaffold(
+          backgroundColor: Colors.black,
+          appBar: AppBar(
+            title: const Text('My Cart'),
+            backgroundColor: Colors.black,
+            centerTitle: true,
+          ),
+          body: SafeArea(
+            child: BlocBuilder<CartBloc, CartState>(
+              bloc: widget._cartBloc,
+              buildWhen: (p, c) => p.listCake != c.listCake,
+              builder: (context, state) => Column(
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: _buildListCart(),
+                  ),
+                  const Expanded(
+                    flex: 3,
+                    child: Payment(),
+                  )
+                ],
+              ),
             ),
-          )
-        ],
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              flex: 5,
-              child: _buildListCart(),
-            ),
-            const Expanded(
-              flex: 4,
-              child: Payment(),
-            )
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 
-  ListView _buildListCart() {
+  Widget _buildListCart() {
+    final listData = widget._cartBloc.state.listCake;
+
     return ListView.builder(
-      itemCount: 4,
+      itemCount: listData?.length ?? 0,
       itemBuilder: (context, index) {
+        final data = listData![index];
+
         return Card(
           color: blackBlue,
           margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
@@ -64,11 +77,12 @@ class _CartScreenState extends State<CartScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Expanded(
+              Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
-                  child: ImagesItem(
-                      urlImage: 'https://www.linkpicture.com/q/ocean.jpg'),
+                  padding:
+                      const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
+                  child: ImageFromUrl(
+                      height: 110, width: 110, urlImage: data.image),
                 ),
               ),
               Gaps.wGap15,
@@ -77,8 +91,8 @@ class _CartScreenState extends State<CartScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Title(title: 'Chocolate latteee'),
-                    const Price(price: '15'),
+                    Title(title: data.name),
+                    Price(price: data.price.toString()),
                     _buildQuantity(),
                   ],
                 ),
@@ -165,32 +179,6 @@ class Title extends StatelessWidget {
   }
 }
 
-class ImagesItem extends StatelessWidget {
-  const ImagesItem({Key? key, required this.urlImage}) : super(key: key);
-
-  final String urlImage;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 110,
-      width: 110,
-      child: CachedNetworkImage(
-        imageUrl: urlImage,
-        imageBuilder: (context, imageProvider) => Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.0),
-            image: DecorationImage(
-              image: imageProvider,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class Payment extends StatelessWidget {
   const Payment({Key? key}) : super(key: key);
 
@@ -213,7 +201,7 @@ class Payment extends StatelessWidget {
           Utils.line,
           Gaps.hGap10,
           _buildText('TOTAL', '14'),
-          Gaps.hGap10,
+          Gaps.hGap20,
           _buildButtonPay(),
         ],
       ),

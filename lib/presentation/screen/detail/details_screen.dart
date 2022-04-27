@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cakeapp/data/modals/cake.dart';
 import 'package:cakeapp/presentation/constants/gaps.dart';
-import 'package:cakeapp/presentation/constants/res/colors.dart';
+import 'package:cakeapp/presentation/res/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
