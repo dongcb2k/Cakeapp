@@ -1,10 +1,11 @@
 import 'package:cakeapp/presentation/di/app_module.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_bloc.dart';
 import 'package:cakeapp/presentation/screen/shop/shop_screen.dart';
+import 'package:cakeapp/presentation/screen/user/user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
-import 'cart/cart_screen.dart';
 import 'home/home_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -24,11 +25,17 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    FlutterNativeSplash.remove();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final pages = [
       const HomeScreen(),
-      ShopScreen(),
-      CartScreen(),
+      const ShopScreen(),
+      const UserScreen(),
     ];
 
     return BlocProvider(

@@ -8,12 +8,18 @@ import 'package:cakeapp/presentation/screen/cart/bloc/cart_event.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:sp_util/sp_util.dart';
 
 @injectable
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc(this._shopItemUseCase, this._localData) : super(const CartState()) {
     on<AddCartEvent>(_checkAddItemToCart);
     on<GetAllCartEvent>(_getAllItemCart);
+    on<RemoveItemByIdEvent>(_removeItemById);
+    on<RemoveAllItemEvent>(((event, emit) {
+      emit(state.copyWith(listCake: []));
+      SpUtil.clear();
+    }));
   }
 
   final GetShopItemUseCase _shopItemUseCase;
@@ -29,13 +35,20 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     if (res.isRight) {
       List<CakeResponse>? listCake = await _localData.getAllCart;
       final cake = res.right.firstWhere((element) => element.id == id);
+      var _checkExist = false;
 
-      if (listCake != null) {
-        listCake.add(cake);
+      if (listCake != null && listCake.isNotEmpty) {
+        for (var element in listCake) {
+          if (element.id == id) {
+            _checkExist = true;
+          }
+        }
+        if (_checkExist == false) {
+          listCake.add(cake);
+        }
       } else {
         listCake = [cake];
       }
-      logger.d('CLICK ADD ' + listCake.toString());
       await _localData.saveItemCart(listCake);
     }
   }
@@ -47,5 +60,17 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     final listCart = await _localData.getAllCart;
     logger.d('GET DATA: ' + listCart.toString());
     emit(state.copyWith(listCake: listCart));
+  }
+
+  FutureOr<void> _removeItemById(
+    RemoveItemByIdEvent event,
+    Emitter<CartState> emit,
+  ) async {
+    final id = event.id;
+    final List<CakeResponse>? listCake = await _localData.getAllCart;
+
+    listCake?.removeWhere((element) => element.id == id);
+    emit(state.copyWith(listCake: listCake));
+    await _localData.saveItemCart(listCake);
   }
 }

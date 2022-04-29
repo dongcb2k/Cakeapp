@@ -11,7 +11,6 @@ class LocalDataImpl extends LocalData {
   Future<List<CakeResponse>?> get getAllCart async {
     final list = SpUtil.getObjList(
         KEY_CART, (v) => CakeResponse.fromJson(v as Map<String, dynamic>));
-    logger.d('GET CART: ' + list.toString());
     return list;
   }
 

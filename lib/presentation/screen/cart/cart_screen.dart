@@ -91,7 +91,11 @@ class _CartScreenState extends State<CartScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Title(title: data.name),
+                    Title(
+                      title: data.name,
+                      cartBloc: widget._cartBloc,
+                      id: data.id,
+                    ),
                     Price(price: data.price.toString()),
                     _buildQuantity(),
                   ],
@@ -151,9 +155,13 @@ class Price extends StatelessWidget {
 }
 
 class Title extends StatelessWidget {
-  const Title({Key? key, required this.title}) : super(key: key);
+  const Title(
+      {Key? key, required this.title, required this.cartBloc, required this.id})
+      : super(key: key);
 
   final String title;
+  final int id;
+  final CartBloc cartBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -170,20 +178,27 @@ class Title extends StatelessWidget {
             style: const TextStyle(color: Colors.white, fontSize: textSize18),
           ),
         ),
-        const IconButton(
-          onPressed: null,
-          icon: Icon(Icons.clear, color: Colors.white),
+        IconButton(
+          onPressed: () => cartBloc.add(RemoveItemByIdEvent(id)),
+          icon: const Icon(Icons.clear, color: Colors.white),
         ),
       ],
     );
   }
 }
 
-class Payment extends StatelessWidget {
+class Payment extends StatefulWidget {
   const Payment({Key? key}) : super(key: key);
 
   @override
+  _PaymentState createState() => _PaymentState();
+}
+
+class _PaymentState extends State<Payment> {
+  @override
   Widget build(BuildContext context) {
+    final _cartBloc = context.read<CartBloc>();
+
     return Container(
       padding: const EdgeInsets.only(left: 40.0, right: 40.0, top: 15.0),
       decoration: const BoxDecoration(
@@ -202,18 +217,18 @@ class Payment extends StatelessWidget {
           Gaps.hGap10,
           _buildText('TOTAL', '14'),
           Gaps.hGap20,
-          _buildButtonPay(),
+          _buildButtonPay(_cartBloc),
         ],
       ),
     );
   }
 
-  Widget _buildButtonPay() {
+  Widget _buildButtonPay(CartBloc cartBloc) {
     return SizedBox(
       height: 45,
       width: double.infinity,
       child: OutlinedButton(
-        onPressed: null,
+        onPressed: () => cartBloc.add(RemoveAllItemEvent()),
         child: const Text('Order', style: Utils.textStyle18),
         style: ButtonStyle(
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
