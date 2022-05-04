@@ -17,4 +17,10 @@ class NavigatorUtils {
     return Navigator.of(context)
         .push<dynamic>(MaterialPageRoute<dynamic>(builder: builder));
   }
+
+  static Future<dynamic> pushAndClear(BuildContext context,
+      WidgetBuilder builder) {
+    return Navigator.of(context)
+        .pushReplacement(MaterialPageRoute<dynamic>(builder: builder));
+  }
 }

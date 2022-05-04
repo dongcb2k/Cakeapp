@@ -20,7 +20,22 @@ class LocalDataImpl extends LocalData {
       logger.d('LOCAL: ' + item.length.toString());
       await SpUtil.putObjectList(KEY_CART, item);
     } else {
-      logger.d('SAVE LOCAL DATA FAIL');
+      logger.d('SAVE LIST FAIL');
+    }
+  }
+
+  @override
+  Future<String?> get getPhoneNumber async {
+    final phone = SpUtil.getString(KEY_PHONE);
+    return phone;
+  }
+
+  @override
+  Future<void> savePhoneNumber(String? phone) async {
+    if (phone != null) {
+      await SpUtil.putString(KEY_PHONE, phone);
+    } else {
+      logger.d('SAVE PHONE FAIL');
     }
   }
 }
