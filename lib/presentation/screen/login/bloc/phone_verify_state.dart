@@ -1,3 +1,4 @@
+import 'package:cakeapp/presentation/res/strings.dart';
 import 'package:equatable/equatable.dart';
 
 class PhoneVerifyState extends Equatable {
@@ -16,6 +17,8 @@ class PhoneVerifyState extends Equatable {
   final String verificationId;
   final bool isLoading;
   final bool isVerifySuccess;
+
+  bool isValidPhone() => phone.length == PHONE_LENGTH;
 
   @override
   List<Object> get props => [

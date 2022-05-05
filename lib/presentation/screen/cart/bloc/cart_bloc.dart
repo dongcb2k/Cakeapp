@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cakeapp/data/modals/cake.dart';
 import 'package:cakeapp/domain/local/local_data.dart';
 import 'package:cakeapp/domain/usecase/shop/shop_item_usecase.dart';
-import 'package:cakeapp/main.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_event.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,8 +57,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     Emitter<CartState> emit,
   ) async {
     final listCart = await _localData.getAllCart;
-    logger.d('GET DATA: ' + listCart.toString());
-    emit(state.copyWith(listCake: listCart));
+    var sum = 0;
+    for(var cake in listCart!) {
+      sum += cake.price;
+    }
+
+    emit(state.copyWith(listCake: listCart, price: sum));
   }
 
   FutureOr<void> _removeItemById(
@@ -68,9 +71,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   ) async {
     final id = event.id;
     final List<CakeResponse>? listCake = await _localData.getAllCart;
+    final sum = state.price - listCake!.firstWhere((element) => element.id == id).price;
 
-    listCake?.removeWhere((element) => element.id == id);
-    emit(state.copyWith(listCake: listCake));
+    listCake.removeWhere((element) => element.id == id);
+
+    emit(state.copyWith(listCake: listCake, price: sum));
     await _localData.saveItemCart(listCake);
   }
 }

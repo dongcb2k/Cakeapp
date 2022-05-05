@@ -59,6 +59,9 @@ dependencies:
 
   flutter_native_splash: ^2.1.6
 
+  # https://pub.dev/packages/pin_code_fields
+  pin_code_fields: ^7.3.0
+
   # Firebase support
   #
   firebase_auth: ^3.3.16

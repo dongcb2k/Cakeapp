@@ -1,9 +1,11 @@
-import 'package:cakeapp/presentation/constants/gaps.dart';
+import 'package:cakeapp/data/modals/cake.dart';
+import 'package:cakeapp/presentation/utils/gaps.dart';
+import 'package:cakeapp/presentation/utils//utils.dart';
+import 'package:cakeapp/presentation/screen/detail/details_screen.dart';
+import 'package:cakeapp/presentation/widgets/image_from_url.dart';
 import 'package:flutter/material.dart';
 
-
 class CakeCard extends StatefulWidget {
-
   const CakeCard({Key? key}) : super(key: key);
 
   @override
@@ -11,21 +13,32 @@ class CakeCard extends StatefulWidget {
 }
 
 class _CakeCardState extends State<CakeCard> {
-  List<String> images = [
-    "assets/images/tyler-nix-nwdtkFzDfPY-unsplash.jpg",
-    "assets/images/newcappuccino.jpg",
-    "assets/images/newcoffee.jpg",
-    "assets/images/nicholas-grande-Hd36cpebWbQ-unsplash.jpg",
+  List<CakeResponse> listCake = [
+    CakeResponse(
+        id: 5,
+        name: 'Matcha Tiramisu',
+        image: 'https://www.linkpicture.com/q/matcha2_1.jpg',
+        ingredient: 'With Matcha Powder',
+        price: 22),
+    CakeResponse(
+        id: 11,
+        name: 'Chocolate Tiramisu',
+        image: 'https://www.linkpicture.com/q/chocolate.jpg',
+        ingredient: 'With Chocolate Powder',
+        price: 20),
+    CakeResponse(
+        id: 7,
+        name: 'Horny Cake',
+        image: 'https://www.linkpicture.com/q/horny.jpg',
+        ingredient: 'With Caramel Drizzle',
+        price: 14),
+    CakeResponse(
+        id: 9,
+        name: 'Ocean Cake',
+        image: 'https://www.linkpicture.com/q/ocean.jpg',
+        ingredient: 'With Oat Milk',
+        price: 18),
   ];
-
-  List<String> ingredients = [
-    "With Oat Milk",
-    "With Cinnamon Powder",
-    "With Chocolate Powder",
-    "With Caramel Drizzle"
-  ];
-
-  List<double> price = [4.29, 3.21, 6.46, 2.90];
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +47,15 @@ class _CakeCardState extends State<CakeCard> {
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        itemCount: images.length,
+        itemCount: listCake.length,
         itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () => {},
+          final _data = listCake[index];
+
+          return InkWell(
+            onTap: () => {
+              NavigatorUtils.pushWidget(
+                  context, (context) => DetailsScreen(cake: _data))
+            },
             child: Row(
               children: [
                 Container(
@@ -49,11 +67,14 @@ class _CakeCardState extends State<CakeCard> {
                       Container(
                         height: 135,
                         width: 140,
+                        child: ImageFromUrl(
+                          height: 120,
+                          width: 150,
+                          urlImage: _data.image,
+                        ),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            image: DecorationImage(
-                                image: AssetImage(images[index]),
-                                fit: BoxFit.cover)),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(15),
@@ -68,7 +89,7 @@ class _CakeCardState extends State<CakeCard> {
                               height: 3,
                             ),
                             Text(
-                              ingredients[index],
+                              _data.ingredient,
                               style: const TextStyle(
                                   color: Color(0xff919293), fontSize: 11),
                             ),
@@ -85,7 +106,7 @@ class _CakeCardState extends State<CakeCard> {
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold)),
                                     TextSpan(
-                                        text: '${price[index]}',
+                                        text: _data.price.toString(),
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,

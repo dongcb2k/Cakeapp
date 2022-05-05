@@ -1,4 +1,4 @@
-import 'package:cakeapp/presentation/constants/gaps.dart';
+import 'package:cakeapp/presentation/utils/gaps.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +8,19 @@ bool _isShowDialog = false;
 
 void setHideLoadingVariable() {
   _isShowDialog = false;
+}
+
+void showToast(BuildContext context, String title) {
+  final scaffold = ScaffoldMessenger.of(context);
+  scaffold.showSnackBar(
+    SnackBar(
+      backgroundColor: const Color(-220299735),
+      content: Text(
+        title,
+        textAlign: TextAlign.center,
+      ),
+    ),
+  );
 }
 
 void hideLoading({required BuildContext context}) {

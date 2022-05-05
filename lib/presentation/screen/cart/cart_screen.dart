@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cakeapp/presentation/res/dimens.dart';
-import 'package:cakeapp/presentation/constants/utils.dart';
+import 'package:cakeapp/presentation/utils/utils.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_bloc.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_event.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_state.dart';
 import 'package:cakeapp/presentation/widgets/image_from_url.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cakeapp/presentation/constants/gaps.dart';
+import 'package:cakeapp/presentation/utils/gaps.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../di/app_module.dart';
@@ -65,9 +65,9 @@ class _CartScreenState extends State<CartScreen> {
     final listData = widget._cartBloc.state.listCake;
 
     return ListView.builder(
-      itemCount: listData?.length ?? 0,
+      itemCount: listData.length,
       itemBuilder: (context, index) {
-        final data = listData![index];
+        final data = listData[index];
 
         return Card(
           color: blackBlue,
@@ -197,28 +197,34 @@ class Payment extends StatefulWidget {
 class _PaymentState extends State<Payment> {
   @override
   Widget build(BuildContext context) {
-    final _cartBloc = context.read<CartBloc>();
-
     return Container(
       padding: const EdgeInsets.only(left: 40.0, right: 40.0, top: 15.0),
       decoration: const BoxDecoration(
           color: blackBlue,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(40.0), topRight: Radius.circular(40.0))),
-      child: Column(
-        children: [
-          _buildPromo(context),
-          Gaps.hGap10,
-          _buildText('Sub Total', '16'),
-          Gaps.hGap5,
-          _buildText('Shipping', '2'),
-          Gaps.hGap10,
-          Utils.line,
-          Gaps.hGap10,
-          _buildText('TOTAL', '14'),
-          Gaps.hGap20,
-          _buildButtonPay(_cartBloc),
-        ],
+      child: BlocProvider.value(
+        value: context.read<CartBloc>(),
+        child: BlocBuilder<CartBloc, CartState>(
+          buildWhen: (previous, current) =>
+              previous.price != current.price ||
+              previous.listCake != current.listCake,
+          builder: (context, state) => Column(
+            children: [
+              _buildPromo(context),
+              Gaps.hGap10,
+              _buildText('Sub Total', state.price.toString()),
+              Gaps.hGap5,
+              _buildText('Shipping', '2'),
+              Gaps.hGap10,
+              Utils.line,
+              Gaps.hGap10,
+              _buildText('TOTAL', (state.price - 2).toString()),
+              Gaps.hGap20,
+              _buildButtonPay(context.read<CartBloc>()),
+            ],
+          ),
+        ),
       ),
     );
   }

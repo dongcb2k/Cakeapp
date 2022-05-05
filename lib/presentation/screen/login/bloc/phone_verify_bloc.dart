@@ -41,19 +41,31 @@ class PhoneVerifyBloc extends Bloc<PhoneVerifyEvent, PhoneVerifyState> {
   ) async {
     try {
       emit(state.copyWith(isLoading: true));
+      var phone = event.phone;
+
+      if(phone.startsWith('0')) {
+        phone = phone.replaceFirst('0', '+84');
+      }
+
       await _authRepository.signInWithPhone(
-        phoneNumber: '+84 96 137 07 10',
+        phoneNumber: phone,
         verificationCompleted: (PhoneAuthCredential credential) async {
-          // On [verificationComplete], we will get the credential from the firebase  and will send it to the [OnPhoneAuthVerificationCompleteEvent] event to be handled by the bloc and then will emit the [PhoneAuthVerified] state after successful login
+          // On [verificationComplete], we will get the credential from the firebase
+          // and will send it to the [OnPhoneAuthVerificationCompleteEvent] event to be handled by the bloc
+          // and then will emit the [PhoneAuthVerified] state after successful login
           add(OnPhoneAuthVerificationCompleteEvent(credential: credential));
         },
         codeSent: (String verificationId, int? resendToken) {
-          // On [codeSent], we will get the verificationId and the resendToken from the firebase and will send it to the [OnPhoneOtpSent] event to be handled by the bloc and then will emit the [OnPhoneAuthVerificationCompleteEvent] event after receiving the code from the user's phone
+          // On [codeSent], we will get the verificationId and the resendToken from the firebase
+          // and will send it to the [OnPhoneOtpSent] event to be handled by the bloc
+          // and then will emit the [OnPhoneAuthVerificationCompleteEvent] event after receiving the code from the user's phone
           add(OnPhoneOtpSent(
               verificationId: verificationId, token: resendToken));
         },
         verificationFailed: (FirebaseAuthException e) {
-          // On [verificationFailed], we will get the exception from the firebase and will send it to the [OnPhoneAuthErrorEvent] event to be handled by the bloc and then will emit the [PhoneAuthError] state in order to display the error to the user's screen
+          // On [verificationFailed], we will get the exception from the firebase
+          // and will send it to the [OnPhoneAuthErrorEvent] event to be handled by the bloc
+          // and then will emit the [PhoneAuthError] state in order to display the error to the user's screen
           add(OnPhoneAuthErrorEvent(error: e.code));
         },
         codeAutoRetrievalTimeout: (String verificationId) {},
@@ -73,7 +85,7 @@ class PhoneVerifyBloc extends Bloc<PhoneVerifyEvent, PhoneVerifyState> {
       // After receiving the otp, we will verify the otp and then will create a credential from the otp and verificationId and then will send it to the [OnPhoneAuthVerificationCompleteEvent] event to be handled by the bloc and then will emit the [PhoneAuthVerified] state after successful login
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: event.verificationId,
-        smsCode: '123456',
+        smsCode: event.otpCode,
       );
       add(OnPhoneAuthVerificationCompleteEvent(credential: credential));
       emit(state.copyWith(isLoading: false));

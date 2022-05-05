@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cakeapp/data/modals/cake.dart';
-import 'package:cakeapp/presentation/constants/gaps.dart';
+import 'package:cakeapp/presentation/utils/gaps.dart';
 import 'package:cakeapp/presentation/res/colors.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_bloc.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_event.dart';
+import 'package:cakeapp/presentation/widgets/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -180,19 +181,6 @@ class DetailsScreen extends StatelessWidget {
   void _buttonBuy(CartBloc _cartBloc, BuildContext context) {
     _cartBloc.add(AddCartEvent(cake.id));
     Navigator.pop(context);
-    _showToast(context);
-  }
-
-  void _showToast(BuildContext context) {
-    final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(
-      const SnackBar(
-        backgroundColor: Color(-220299735),
-        content: Text(
-          'Added to Cart',
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
+    showToast(context, 'Add to Cart');
   }
 }

@@ -1,7 +1,7 @@
 import 'package:cakeapp/data/modals/cake.dart';
 import 'package:cakeapp/domain/local/local_data.dart';
 import 'package:cakeapp/main.dart';
-import 'package:cakeapp/presentation/constants/const.dart';
+import 'package:cakeapp/presentation/res/strings.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sp_util/sp_util.dart';
 

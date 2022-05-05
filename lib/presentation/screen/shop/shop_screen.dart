@@ -1,4 +1,4 @@
-import 'package:cakeapp/presentation/constants/utils.dart';
+import 'package:cakeapp/presentation/utils/utils.dart';
 import 'package:cakeapp/presentation/di/app_module.dart';
 import 'package:cakeapp/presentation/screen/cart/cart_screen.dart';
 import 'package:cakeapp/presentation/screen/shop/bloc/shop_bloc.dart';

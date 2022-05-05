@@ -1,16 +1,47 @@
-import 'package:cakeapp/presentation/constants/gaps.dart';
+import 'package:cakeapp/data/modals/cake.dart';
+import 'package:cakeapp/presentation/utils/gaps.dart';
 import 'package:cakeapp/presentation/widgets/list_cake_card.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/cake_card.dart';
 
-
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends State<HomeScreen> {
+  List<CakeResponse> listCake = [
+    CakeResponse(
+        id: 2,
+        name: 'Sakura Cake',
+        image: 'https://www.linkpicture.com/q/sakura.jpg',
+        ingredient: 'With Strawberry Siro',
+        price: 25),
+    CakeResponse(
+        id: 3,
+        name: 'Blueberry Cake',
+        image: 'https://www.linkpicture.com/q/blueberry.jpg',
+        ingredient: 'With Blueberry And Sugar',
+        price: 18),
+    CakeResponse(
+        id: 11,
+        name: 'Chocolate Tiramisu',
+        image: 'https://www.linkpicture.com/q/chocolate.jpg',
+        ingredient: 'With Chocolate Powder',
+        price: 20),
+    CakeResponse(
+        id: 12,
+        name: 'Strawberry Cake',
+        image: 'https://www.linkpicture.com/q/strawberry.jpg',
+        ingredient: 'With Oat Milk And Strawberry',
+        price: 18),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -43,7 +74,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Gaps.hGap20,
-            ListCakeCard(listCake: const [],),
+            ListCakeCard(listCake: listCake),
           ],
         ),
       ),

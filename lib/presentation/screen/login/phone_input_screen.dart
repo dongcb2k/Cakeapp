@@ -1,13 +1,17 @@
-import 'package:cakeapp/presentation/constants/utils.dart';
+import 'package:cakeapp/presentation/res/colors.dart';
+import 'package:cakeapp/presentation/res/strings.dart';
+import 'package:cakeapp/presentation/utils/utils.dart';
 import 'package:cakeapp/presentation/di/app_module.dart';
 import 'package:cakeapp/presentation/screen/login/bloc/phone_verify_bloc.dart';
 import 'package:cakeapp/presentation/screen/login/bloc/phone_verify_event.dart';
 import 'package:cakeapp/presentation/screen/login/bloc/phone_verify_state.dart';
-import 'package:cakeapp/presentation/screen/main_screen.dart';
+import 'package:cakeapp/presentation/screen/login/verify_screen.dart';
+import 'package:cakeapp/presentation/widgets/app_name.dart';
+import 'package:cakeapp/presentation/widgets/common_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../constants/gaps.dart';
+import '../../utils/gaps.dart';
 
 class PhoneInputScreen extends StatefulWidget {
   const PhoneInputScreen({Key? key}) : super(key: key);
@@ -21,48 +25,39 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.transparent,
+      backgroundColor: backgroundColor,
       body: BlocProvider(
         create: (context) => sl<PhoneVerifyBloc>(),
-        child: BlocListener<PhoneVerifyBloc, PhoneVerifyState>(
-          listener: (context, state) {
-            if (state.isVerifySuccess == true) {
-              NavigatorUtils.pushAndClear(
-                  context, (context) => const MainScreen());
-            }
-          },
-          child: SafeArea(
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    'assets/images/login.png',
-                  ),
-                  fit: BoxFit.cover,
+        child: SafeArea(
+          child: Column(
+            children: [
+              const Expanded(
+                flex: 2,
+                child: AppName(),
+              ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius:
+                          BorderRadius.only(topLeft: Radius.circular(80.0))),
+                  child: _buildTextField(context),
                 ),
-              ),
-              child: Column(
-                children: [
-                  _buildAppName(),
-                  _buildTextField(context),
-                ],
-              ),
-            ),
+              )
+            ],
           ),
         ),
       ),
     );
   }
 
-  Container _buildTextField(BuildContext context) {
+  Widget _buildTextField(BuildContext context) {
     final _verifyBloc = context.read<PhoneVerifyBloc>();
 
     return Container(
-      padding: EdgeInsets.only(
-        top: MediaQuery
-            .of(context)
-            .size
-            .height * 0.25,
+      padding: const EdgeInsets.only(
+        top: 50,
         left: 35,
         right: 35,
       ),
@@ -75,65 +70,23 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
             );
           }
           return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              TextField(
-                keyboardType: TextInputType.phone,
-                maxLength: 10,
-                style: const TextStyle(fontSize: 20),
-                decoration: InputDecoration(
-                  labelText: 'Phone number',
-                  counterText: '',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                ),
-                onChanged: (phone) {
-                  _verifyBloc.add(PhoneChangedEvent(phone));
-                },
-              ),
+              _buildPhoneInput(_verifyBloc),
               Gaps.hGap25,
-              TextField(
-                keyboardType: TextInputType.phone,
-                maxLength: 10,
-                style: const TextStyle(fontSize: 20),
-                decoration: InputDecoration(
-                  labelText: 'Verify',
-                  counterText: '',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+              BlocBuilder<PhoneVerifyBloc, PhoneVerifyState>(
+                buildWhen: (previous, current) =>
+                    previous.isValidPhone() != current.isValidPhone(),
+                builder: (context, state) => CommonButton(
+                  icon: const Text('NEXT', style: Utils.textStyle18),
+                  label: const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
                   ),
+                  onPressed: () => state.phone.length == PHONE_LENGTH
+                      ? _onVerifyPhone(_verifyBloc, state, context)
+                      : null,
                 ),
-                onChanged: (otp) {
-                  _verifyBloc.add(OtpChangedEvent(otp));
-                },
-              ),
-              Gaps.hGap25,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      maximumSize: const Size(170.0, 90.0),
-                      minimumSize: const Size(170.0, 60.0),
-                      primary: Colors.black,
-                      shape: const StadiumBorder(),
-                    ),
-                    onPressed: () {
-                      _verifyBloc.add(SendOtpSmsEvent(state.phone));
-                      _verifyBloc.add(VerifyOtpEvent(state.otp, state.verificationId));
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text('LOG IN'),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
               ),
             ],
           );
@@ -142,22 +95,34 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
     );
   }
 
-  Container _buildAppName() {
-    return Container(
-      alignment: Alignment.topCenter,
-      padding: const EdgeInsets.only(
-        top: 45.0,
-      ),
-      child: const Text(
-        'DCake',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.orange,
-          fontSize: 55.0,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'logo_font',
+  Widget _buildPhoneInput(PhoneVerifyBloc _verifyBloc) {
+    return TextField(
+      keyboardType: TextInputType.phone,
+      maxLength: 10,
+      style: const TextStyle(fontSize: 20),
+      decoration: InputDecoration(
+        labelText: 'Phone number',
+        counterText: '',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0),
         ),
       ),
+      onChanged: (phone) {
+        _verifyBloc.add(PhoneChangedEvent(phone));
+      },
     );
+  }
+
+  void _onVerifyPhone(
+    PhoneVerifyBloc _verifyBloc,
+    PhoneVerifyState state,
+    BuildContext context,
+  ) {
+    _verifyBloc.add(SendOtpSmsEvent(state.phone));
+
+    if (state.error.isEmpty && state.phone.isNotEmpty) {
+      NavigatorUtils.pushWidget(
+          context, (context) => OtpVerifyScreen(phoneVerifyBloc: _verifyBloc));
+    }
   }
 }

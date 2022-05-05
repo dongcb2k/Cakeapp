@@ -1,9 +1,10 @@
 import 'package:cakeapp/data/modals/cake.dart';
-import 'package:cakeapp/presentation/constants/gaps.dart';
-import 'package:cakeapp/presentation/constants/utils.dart';
+import 'package:cakeapp/presentation/utils/gaps.dart';
+import 'package:cakeapp/presentation/utils/utils.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_bloc.dart';
 import 'package:cakeapp/presentation/screen/detail/details_screen.dart';
 import 'package:cakeapp/presentation/widgets/image_from_url.dart';
+import 'package:cakeapp/presentation/widgets/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -84,33 +85,39 @@ class ListCakeCard extends StatelessWidget {
               text: TextSpan(
                 children: [
                   const TextSpan(
-                      text: r'$',
+                      text: r'$ ',
                       style: TextStyle(
                           color: orange,
-                          fontSize: 20,
+                          fontSize: 22,
                           fontWeight: FontWeight.bold)),
                   TextSpan(
-                      text: data.price.toString(), style: Utils.textStyle18),
+                      text: data.price.toString(),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
             Gaps.wGap100,
-            _buildButtonAdd(data),
+            _buildButtonAdd(data, context),
           ],
         ),
       ],
     );
   }
 
-  Container _buildButtonAdd(CakeResponse data) {
+  Container _buildButtonAdd(CakeResponse data, BuildContext context) {
     return Container(
       height: 25,
       width: 25,
-      decoration: BoxDecoration(
-          color: orange,
-          borderRadius: BorderRadius.circular(10)),
+      decoration:
+          BoxDecoration(color: orange, borderRadius: BorderRadius.circular(10)),
       child: GestureDetector(
-        onTap: () => _cartBloc..add(AddCartEvent(data.id)),
+        onTap: () {
+          _cartBloc.add(AddCartEvent(data.id));
+          showToast(context, 'Add to Cart');
+          },
         child: const Icon(
           Icons.add,
           color: Colors.white,
