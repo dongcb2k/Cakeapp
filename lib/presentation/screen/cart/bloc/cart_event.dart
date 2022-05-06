@@ -28,3 +28,20 @@ class RemoveItemByIdEvent extends CartEvent {
 }
 
 class RemoveAllItemEvent extends CartEvent {}
+
+class GetAllVoucher extends CartEvent {}
+
+class PickVoucherEvent extends CartEvent {
+  const PickVoucherEvent(this.freeship, this.description, this.percent);
+
+  final bool freeship;
+  final String description;
+  final int percent;
+
+  @override
+  List<Object> get props => [
+        freeship,
+        description,
+        percent,
+      ];
+}

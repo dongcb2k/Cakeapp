@@ -1,26 +1,49 @@
 import 'package:cakeapp/data/modals/cake.dart';
+import 'package:cakeapp/data/modals/voucher.dart';
 import 'package:equatable/equatable.dart';
 
 class CartState extends Equatable {
   const CartState({
     this.listCake = const [],
-    this.price = 0,
+    this.listVoucher = const [],
+    this.subPrice = 0,
+    this.freeship = false,
+    this.description = 'Add Promo',
+    this.percent = 0,
   });
 
   final List<CakeResponse> listCake;
-  final int price;
+  final List<VoucherResponse> listVoucher;
+  final double subPrice;
+  final bool freeship;
+  final String description;
+  final int percent;
 
   @override
   List<Object?> get props => [
         listCake,
-        price,
+        subPrice,
+        listVoucher,
+        freeship,
+        description,
+        percent,
       ];
 
   CartState copyWith({
     List<CakeResponse>? listCake,
-    int? price,
+    List<VoucherResponse>? listVoucher,
+    double? subPrice,
+    bool? freeship,
+    String? description,
+    int? percent,
   }) {
     return CartState(
-        listCake: listCake ?? this.listCake, price: price ?? this.price);
+      listCake: listCake ?? this.listCake,
+      subPrice: subPrice ?? this.subPrice,
+      listVoucher: listVoucher ?? this.listVoucher,
+      freeship: freeship ?? this.freeship,
+      description: description ?? this.description,
+      percent: percent ?? this.percent,
+    );
   }
 }

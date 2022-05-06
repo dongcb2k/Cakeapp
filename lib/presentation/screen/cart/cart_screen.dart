@@ -1,5 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cakeapp/data/modals/voucher.dart';
 import 'package:cakeapp/presentation/res/dimens.dart';
+import 'package:cakeapp/presentation/res/strings.dart';
 import 'package:cakeapp/presentation/utils/utils.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_bloc.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_event.dart';
@@ -27,6 +28,7 @@ class _CartScreenState extends State<CartScreen> {
   void initState() {
     super.initState();
     widget._cartBloc.add(GetAllCartEvent());
+    widget._cartBloc.add(GetAllVoucher());
   }
 
   @override
@@ -43,16 +45,17 @@ class _CartScreenState extends State<CartScreen> {
           body: SafeArea(
             child: BlocBuilder<CartBloc, CartState>(
               bloc: widget._cartBloc,
-              buildWhen: (p, c) => p.listCake != c.listCake,
               builder: (context, state) => Column(
                 children: [
                   Expanded(
                     flex: 4,
                     child: _buildListCart(),
                   ),
-                  const Expanded(
+                  Expanded(
                     flex: 3,
-                    child: Payment(),
+                    child: Payment(
+                      listVoucher: state.listVoucher,
+                    ),
                   )
                 ],
               ),
@@ -155,9 +158,12 @@ class Price extends StatelessWidget {
 }
 
 class Title extends StatelessWidget {
-  const Title(
-      {Key? key, required this.title, required this.cartBloc, required this.id})
-      : super(key: key);
+  const Title({
+    Key? key,
+    required this.title,
+    required this.cartBloc,
+    required this.id,
+  }) : super(key: key);
 
   final String title;
   final int id;
@@ -188,7 +194,9 @@ class Title extends StatelessWidget {
 }
 
 class Payment extends StatefulWidget {
-  const Payment({Key? key}) : super(key: key);
+  const Payment({Key? key, required this.listVoucher}) : super(key: key);
+
+  final List<VoucherResponse> listVoucher;
 
   @override
   _PaymentState createState() => _PaymentState();
@@ -207,23 +215,36 @@ class _PaymentState extends State<Payment> {
         value: context.read<CartBloc>(),
         child: BlocBuilder<CartBloc, CartState>(
           buildWhen: (previous, current) =>
-              previous.price != current.price ||
-              previous.listCake != current.listCake,
-          builder: (context, state) => Column(
-            children: [
-              _buildPromo(context),
-              Gaps.hGap10,
-              _buildText('Sub Total', state.price.toString()),
-              Gaps.hGap5,
-              _buildText('Shipping', '2'),
-              Gaps.hGap10,
-              Utils.line,
-              Gaps.hGap10,
-              _buildText('TOTAL', (state.price - 2).toString()),
-              Gaps.hGap20,
-              _buildButtonPay(context.read<CartBloc>()),
-            ],
-          ),
+              previous.listCake != current.listCake ||
+              previous.description != current.description,
+          builder: (context, state) {
+            double sum =
+                state.subPrice - (state.subPrice * state.percent / 100);
+
+            return Column(
+              children: [
+                _buildPromo(
+                  context,
+                  widget.listVoucher,
+                  state.description,
+                  context.read<CartBloc>(),
+                ),
+                Gaps.hGap15,
+                _buildText('Sub Total', sum.toString(), false),
+                Gaps.hGap5,
+                _buildText('Ship', SHIP.toString(), state.freeship),
+                Gaps.hGap10,
+                Utils.line,
+                Gaps.hGap10,
+                _buildText(
+                    'TOTAL',
+                    state.freeship ? sum.toString() : (sum + SHIP).toString(),
+                    false),
+                Gaps.hGap20,
+                _buildButtonPay(context.read<CartBloc>()),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -244,7 +265,11 @@ class _PaymentState extends State<Payment> {
     );
   }
 
-  Widget _buildText(String title, String price) {
+  Widget _buildText(
+    String title,
+    String price,
+    bool freeShip,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: Row(
@@ -257,7 +282,9 @@ class _PaymentState extends State<Payment> {
                 const TextSpan(
                     text: r'$',
                     style: TextStyle(color: orange, fontSize: textSize18)),
-                TextSpan(text: price, style: Utils.textStyle18),
+                TextSpan(
+                    text: freeShip == true ? '0' : price,
+                    style: Utils.textStyle18),
               ],
             ),
           )
@@ -266,7 +293,12 @@ class _PaymentState extends State<Payment> {
     );
   }
 
-  Widget _buildPromo(BuildContext context) {
+  Widget _buildPromo(
+    BuildContext context,
+    List<VoucherResponse> list,
+    String voucherDes,
+    CartBloc cartBloc,
+  ) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(left: 10.0),
@@ -276,9 +308,9 @@ class _PaymentState extends State<Payment> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Promo Code', style: Utils.textStyle18),
+          Text(voucherDes, style: Utils.textStyle18),
           OutlinedButton(
-            onPressed: () => _buildPromoDialog(context),
+            onPressed: () => _buildPromoDialog(context, list, cartBloc),
             child: const Text('Add', style: Utils.textStyle18),
             style: ButtonStyle(
                 shape: MaterialStateProperty.all(RoundedRectangleBorder(
@@ -292,28 +324,64 @@ class _PaymentState extends State<Payment> {
     );
   }
 
-  Future _buildPromoDialog(BuildContext context) async {
+  void _buildPromoDialog(
+    BuildContext context,
+    List<VoucherResponse> list,
+    CartBloc cartBloc,
+  ) async {
     return showModalBottomSheet(
       context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
+        ),
+      ),
       builder: (context) {
-        return FractionallySizedBox(
-          heightFactor: 1,
-          child: ListView(
-            children: [
-              ListTile(
-                title: const Text('1'),
-                leading: CachedNetworkImage(
-                  imageUrl: 'https://www.linkpicture.com/q/matcha2.jpg',
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) =>
-                      const CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+        return Container(
+          padding: const EdgeInsets.only(top: 30.0, bottom: 8.0),
+          child: ListView.builder(
+            itemCount: list.length,
+            itemBuilder: (context, index) {
+              final data = list[index];
+              return InkWell(
+                onTap: () => _onClickVoucher(cartBloc, data, context),
+                child: Card(
+                  color: const Color(-336017757),
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 3.0, horizontal: 10.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 10.0),
+                        width: 80,
+                        height: 80,
+                        child: Image.asset('assets/images/voucher.png',
+                            fit: BoxFit.cover),
+                      ),
+                      Gaps.wGap10,
+                      Text(
+                        data.description,
+                        style: const TextStyle(fontSize: 22),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              );
+            },
           ),
         );
       },
     );
+  }
+
+  void _onClickVoucher(
+      CartBloc cartBloc, VoucherResponse data, BuildContext context) {
+    cartBloc.add(PickVoucherEvent(
+      data.freeship,
+      data.description,
+      data.percent,
+    ));
+    Navigator.pop(context);
   }
 }

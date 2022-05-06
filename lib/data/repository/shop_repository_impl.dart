@@ -1,4 +1,5 @@
 import 'package:cakeapp/data/modals/cake.dart';
+import 'package:cakeapp/data/modals/voucher.dart';
 import 'package:cakeapp/data/remote/service/shop_service.dart';
 import 'package:cakeapp/domain/repository/shop_repository.dart';
 import 'package:cakeapp/domain/utils/error.dart';
@@ -27,5 +28,17 @@ class ShopRepositoryImpl extends ShopRepository {
   }
 
   @override
-  void dispose() {}
+  Future<Either<AppError, List<VoucherResponse>>> getVoucher() async {
+    try {
+      final res = await _shopService.getVoucher();
+
+      if (res.isNotEmpty) {
+        return Right(res);
+      } else {
+        return const Left(ServerError('Error', '100'));
+      }
+    } catch (e) {
+      return Left(getError(e));
+    }
+  }
 }
