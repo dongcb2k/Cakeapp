@@ -1,3 +1,4 @@
+import 'package:cakeapp/presentation/utils/gaps.dart';
 import 'package:cakeapp/presentation/utils/utils.dart';
 import 'package:cakeapp/presentation/di/app_module.dart';
 import 'package:cakeapp/presentation/screen/cart/cart_screen.dart';
@@ -5,6 +6,7 @@ import 'package:cakeapp/presentation/screen/shop/bloc/shop_bloc.dart';
 import 'package:cakeapp/presentation/screen/shop/bloc/shop_event.dart';
 import 'package:cakeapp/presentation/screen/shop/bloc/shop_state.dart';
 import 'package:cakeapp/presentation/widgets/list_cake_card.dart';
+import 'package:cakeapp/presentation/widgets/list_category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,18 +34,17 @@ class _ShopItemState extends State<ShopItem> {
   @override
   void initState() {
     super.initState();
-
     _shopBloc.add(GetShopEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-
     return BlocProvider(
       create: (context) => _shopBloc,
       child: Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: const Text('Shop'),
           backgroundColor: Colors.black,
           centerTitle: true,
@@ -60,12 +61,22 @@ class _ShopItemState extends State<ShopItem> {
             )
           ],
         ),
-        body: BlocBuilder<ShopBloc, ShopState>(
-          bloc: _shopBloc,
-          buildWhen: (p, v) => p.listCake != v.listCake,
-          builder: (context, state) {
-            return ListCakeCard(listCake: state.listCake ?? []);
-          },
+        body: Container(
+          margin:
+          const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: ListCategory(
+                  shopBloc: _shopBloc,
+                ),
+              ),
+              Expanded(
+                flex: 9,
+                child: ListCakeCard(shopBloc: _shopBloc),
+              ),
+            ],
+          ),
         ),
       ),
     );

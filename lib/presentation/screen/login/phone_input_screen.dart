@@ -10,6 +10,7 @@ import 'package:cakeapp/presentation/widgets/app_name.dart';
 import 'package:cakeapp/presentation/widgets/common_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import '../../utils/gaps.dart';
 
@@ -21,6 +22,13 @@ class PhoneInputScreen extends StatefulWidget {
 }
 
 class _PhoneInputScreenState extends State<PhoneInputScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 3));
+    FlutterNativeSplash.remove();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -6,3 +6,14 @@ abstract class ShopEvent extends Equatable {
 }
 
 class GetShopEvent extends ShopEvent {}
+
+class GetCategoryEvent extends ShopEvent {}
+
+class FilterDataEvent extends ShopEvent {
+  FilterDataEvent(this.categoryFilter);
+
+  final String categoryFilter;
+
+  @override
+  List<Object?> get props => [categoryFilter];
+}

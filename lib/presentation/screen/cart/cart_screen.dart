@@ -1,6 +1,7 @@
 import 'package:cakeapp/data/modals/voucher.dart';
 import 'package:cakeapp/presentation/res/dimens.dart';
 import 'package:cakeapp/presentation/res/strings.dart';
+import 'package:cakeapp/presentation/screen/payment/payment_screen.dart';
 import 'package:cakeapp/presentation/utils/utils.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_bloc.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_event.dart';
@@ -255,7 +256,7 @@ class _PaymentState extends State<Payment> {
       height: 45,
       width: double.infinity,
       child: OutlinedButton(
-        onPressed: () => cartBloc.add(RemoveAllItemEvent()),
+        onPressed: () => NavigatorUtils.pushWidget(context, (context) => const PaymentScreen()),
         child: const Text('Order', style: Utils.textStyle18),
         style: ButtonStyle(
             shape: MaterialStateProperty.all(RoundedRectangleBorder(

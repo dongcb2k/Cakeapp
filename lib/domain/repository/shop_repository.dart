@@ -1,3 +1,4 @@
+import 'package:cakeapp/data/modals/category.dart';
 import 'package:cakeapp/data/modals/voucher.dart';
 import 'package:cakeapp/domain/utils/error.dart';
 import 'package:either_dart/either.dart';
@@ -9,4 +10,5 @@ abstract class ShopRepository {
 
   Future<Either<AppError, List<VoucherResponse>>> getVoucher();
 
+  Future<Either<AppError, List<CategoryResponse>>> getCategory();
 }

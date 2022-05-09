@@ -15,8 +15,7 @@ var logger = Logger(
 );
 
 void main() async {
-  // initSplash();
-  WidgetsFlutterBinding.ensureInitialized();
+  initSplash();
   SpUtil.getInstance();
   await Firebase.initializeApp();
   await configureDependencies();

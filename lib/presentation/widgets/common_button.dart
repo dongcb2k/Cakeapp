@@ -25,9 +25,9 @@ class CommonButton extends StatelessWidget {
     return ElevatedButton.icon(
       onPressed: onPressed,
       style: ButtonStyle(
-          padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
-            vertical: 18.0,
-            horizontal: 50.0,
+          padding: MaterialStateProperty.all(EdgeInsets.symmetric(
+            vertical: heightPadding ?? 18.0,
+            horizontal: widthPadding ?? 50.0,
           )),
           foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
           backgroundColor: MaterialStateProperty.resolveWith<Color>(

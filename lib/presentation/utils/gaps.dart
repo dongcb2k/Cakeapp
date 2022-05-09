@@ -15,4 +15,7 @@ class Gaps {
   static const wGap20 = SizedBox(width: 20);
   static const wGap25 = SizedBox(width: 25);
   static const wGap100 = SizedBox(width: 100);
+
+  static const empty = SizedBox.shrink();
+
 }

@@ -92,6 +92,6 @@ flutter:
 flutter_native_splash:
   color: "#ffffff"
 
-  image: assets/images/cake.png
+  image: assets/images/logo.png
 
   fullscreen: true

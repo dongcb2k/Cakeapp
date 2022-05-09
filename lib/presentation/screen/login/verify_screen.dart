@@ -6,6 +6,7 @@ import 'package:cakeapp/presentation/screen/login/bloc/phone_verify_event.dart';
 import 'package:cakeapp/presentation/screen/login/bloc/phone_verify_state.dart';
 import 'package:cakeapp/presentation/screen/main_screen.dart';
 import 'package:cakeapp/presentation/widgets/app_name.dart';
+import 'package:cakeapp/presentation/widgets/common_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -64,9 +65,16 @@ class _OtpVerifyViewState extends State<_OtpVerifyView> {
                       const _OtpInputW(),
                       BlocBuilder<PhoneVerifyBloc, PhoneVerifyState>(
                         builder: (context, state) {
-                          return TextButton(
+                          return CommonButton(
+                            icon: const Text(
+                              'Submit',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                            label: const Text(''),
                             onPressed: () => _onSubmitVerify(context, state),
-                            child: const Text('Submit'),
                           );
                         },
                       ),
@@ -103,14 +111,15 @@ class _OtpInputW extends StatelessWidget {
       length: OTP_LENGTH,
       mainAxisAlignment: MainAxisAlignment.center,
       autoFocus: true,
+      cursorColor: Colors.orange,
       textStyle: Utils.textStyle25,
       keyboardAppearance: Brightness.light,
       pinTheme: PinTheme(
         fieldWidth: itemWidth,
         fieldHeight: itemHeight,
-        activeColor: darkGray,
+        activeColor: Colors.orange,
         inactiveColor: darkGray,
-        selectedColor: darkGray,
+        selectedColor: Colors.orange,
         fieldOuterPadding: const EdgeInsets.all(4),
       ),
       enablePinAutofill: false,

@@ -1,36 +1,32 @@
-import 'package:cakeapp/data/modals/cake.dart';
-import 'package:cakeapp/presentation/screen/shop/bloc/shop_bloc.dart';
-import 'package:cakeapp/presentation/screen/shop/bloc/shop_state.dart';
+import 'package:cakeapp/presentation/di/app_module.dart';
+import 'package:cakeapp/presentation/res/colors.dart';
+import 'package:cakeapp/presentation/screen/cart/bloc/cart_bloc.dart';
+import 'package:cakeapp/presentation/screen/cart/bloc/cart_event.dart';
+import 'package:cakeapp/presentation/screen/detail/details_screen.dart';
 import 'package:cakeapp/presentation/utils/gaps.dart';
 import 'package:cakeapp/presentation/utils/utils.dart';
-import 'package:cakeapp/presentation/screen/cart/bloc/cart_bloc.dart';
-import 'package:cakeapp/presentation/screen/detail/details_screen.dart';
 import 'package:cakeapp/presentation/widgets/image_from_url.dart';
 import 'package:cakeapp/presentation/widgets/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../di/app_module.dart';
-import '../res/colors.dart';
-import '../screen/cart/bloc/cart_event.dart';
+import '../../data/modals/cake.dart';
 
-class ListCakeCard extends StatelessWidget {
-  ListCakeCard({Key? key, required this.shopBloc}) : super(key: key);
+class ListSpecialCake extends StatelessWidget {
+  ListSpecialCake({Key? key, this.listCake}) : super(key: key);
 
-  final ShopBloc shopBloc;
-
+  final List<CakeResponse>? listCake;
   final _cartBloc = sl<CartBloc>();
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ShopBloc, ShopState>(
-      bloc: shopBloc,
-      buildWhen: (p, c) => p.listCake != c.listCake,
-      builder: (context, state) => ListView.builder(
+    return BlocProvider(
+      create: (_) => _cartBloc,
+      child: ListView.builder(
         shrinkWrap: true,
-        itemCount: state.listCake.length,
+        itemCount: listCake?.length,
         itemBuilder: (context, index) {
-          final data = state.listCake[index];
+          final data = listCake![index];
 
           return InkWell(
             onTap: () {
@@ -116,7 +112,7 @@ class ListCakeCard extends StatelessWidget {
       height: 25,
       width: 25,
       decoration:
-          BoxDecoration(color: orange, borderRadius: BorderRadius.circular(10)),
+      BoxDecoration(color: orange, borderRadius: BorderRadius.circular(10)),
       child: GestureDetector(
         onTap: () {
           _cartBloc.add(AddCartEvent(data.id));

@@ -24,7 +24,7 @@ class _ShopService implements ShopService {
     final _result = await _dio.fetch<List<dynamic>>(
         _setStreamType<List<CakeResponse>>(
             Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, '2f1cc49c-0985-4c0f-8b40-15ff4a4da470',
+                .compose(_dio.options, '95597acb-79d0-44a2-8949-87136ba32a7f',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     var value = _result.data!
@@ -47,6 +47,25 @@ class _ShopService implements ShopService {
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     var value = _result.data!
         .map((dynamic i) => VoucherResponse.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<CategoryResponse>> getCategory() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<List<dynamic>>(
+        _setStreamType<List<CategoryResponse>>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, 'f3f12d22-c60a-4227-8057-f4a78a4e6d56',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map(
+            (dynamic i) => CategoryResponse.fromJson(i as Map<String, dynamic>))
         .toList();
     return value;
   }
