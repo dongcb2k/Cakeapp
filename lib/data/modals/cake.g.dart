@@ -9,7 +9,7 @@ part of 'cake.dart';
 CakeResponse _$CakeResponseFromJson(Map<String, dynamic> json) => CakeResponse(
       id: json['id'] as int,
       name: json['name'] as String,
-      category: json['category'] as String,
+      category: json['category'] as String?,
       image: json['image'] as String,
       ingredient: json['ingredient'] as String,
       price: (json['price'] as num).toDouble(),

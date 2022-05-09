@@ -20,7 +20,7 @@ class CakeResponse {
   String name;
 
   @JsonKey(name: 'category')
-  String category;
+  String? category;
 
   @JsonKey(name: 'image')
   String image;

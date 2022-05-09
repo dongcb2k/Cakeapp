@@ -11,12 +11,15 @@ class PaymentState extends Equatable {
   final String phoneNumber;
   final String location;
 
+  bool isValidField() =>
+      name.isNotEmpty && phoneNumber.isNotEmpty && location.isNotEmpty;
+
   @override
   List<Object?> get props => [
-    name,
-    phoneNumber,
-    location,
-  ];
+        name,
+        phoneNumber,
+        location,
+      ];
 
   PaymentState copyWith({
     String? name,

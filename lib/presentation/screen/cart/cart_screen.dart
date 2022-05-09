@@ -7,6 +7,7 @@ import 'package:cakeapp/presentation/screen/cart/bloc/cart_bloc.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_event.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_state.dart';
 import 'package:cakeapp/presentation/widgets/image_from_url.dart';
+import 'package:cakeapp/presentation/widgets/progress_dialog.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cakeapp/presentation/utils/gaps.dart';
@@ -242,7 +243,8 @@ class _PaymentState extends State<Payment> {
                     state.freeship ? sum.toString() : (sum + SHIP).toString(),
                     false),
                 Gaps.hGap20,
-                _buildButtonPay(context.read<CartBloc>()),
+                _buildButtonPay(context,
+                    state.freeship ? sum.toString() : (sum + SHIP).toString()),
               ],
             );
           },
@@ -251,17 +253,22 @@ class _PaymentState extends State<Payment> {
     );
   }
 
-  Widget _buildButtonPay(CartBloc cartBloc) {
+  Widget _buildButtonPay(BuildContext context, String sum) {
     return SizedBox(
       height: 45,
       width: double.infinity,
-      child: OutlinedButton(
-        onPressed: () => NavigatorUtils.pushWidget(context, (context) => const PaymentScreen()),
-        child: const Text('Order', style: Utils.textStyle18),
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0))),
-            backgroundColor: MaterialStateProperty.all(orange)),
+      child: BlocBuilder<CartBloc, CartState>(
+        builder: (context, state) => OutlinedButton(
+          onPressed: () => state.subPrice >= 5.0
+              ? NavigatorUtils.pushWidget(
+                  context, (context) => PaymentScreen(total: sum))
+              : showToast(context, 'Cart is Empty!'),
+          child: const Text('Order', style: Utils.textStyle18),
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0))),
+              backgroundColor: MaterialStateProperty.all(orange)),
+        ),
       ),
     );
   }

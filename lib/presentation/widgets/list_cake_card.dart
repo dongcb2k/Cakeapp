@@ -14,17 +14,22 @@ import '../di/app_module.dart';
 import '../res/colors.dart';
 import '../screen/cart/bloc/cart_event.dart';
 
-class ListCakeCard extends StatelessWidget {
-  ListCakeCard({Key? key, required this.shopBloc}) : super(key: key);
+class ListCakeCard extends StatefulWidget {
+  const ListCakeCard({Key? key, required this.shopBloc}) : super(key: key);
 
   final ShopBloc shopBloc;
 
+  @override
+  State<ListCakeCard> createState() => _ListCakeCardState();
+}
+
+class _ListCakeCardState extends State<ListCakeCard> {
   final _cartBloc = sl<CartBloc>();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ShopBloc, ShopState>(
-      bloc: shopBloc,
+      bloc: widget.shopBloc,
       buildWhen: (p, c) => p.listCake != c.listCake,
       builder: (context, state) => ListView.builder(
         shrinkWrap: true,

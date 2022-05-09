@@ -19,6 +19,7 @@ void showToast(BuildContext context, String title) {
         title,
         textAlign: TextAlign.center,
       ),
+      duration: const Duration(seconds: 1),
     ),
   );
 }

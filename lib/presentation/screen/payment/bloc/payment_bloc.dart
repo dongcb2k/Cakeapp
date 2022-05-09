@@ -5,6 +5,14 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
-  PaymentBloc() : super(const PaymentState());
+  PaymentBloc() : super(const PaymentState()) {
+    on<NameChangedEvent>(
+        (event, emit) => emit(state.copyWith(name: event.name)));
 
+    on<PhoneNumberChangedEvent>(
+        (event, emit) => emit(state.copyWith(phoneNumber: event.phone)));
+
+    on<LocationChangedEvent>(
+        (event, emit) => emit(state.copyWith(location: event.location)));
+  }
 }
