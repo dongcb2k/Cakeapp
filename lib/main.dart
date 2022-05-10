@@ -1,7 +1,6 @@
 import 'package:cakeapp/presentation/di/app_module.dart';
 import 'package:cakeapp/presentation/screen/cart/bloc/cart_bloc.dart';
 import 'package:cakeapp/presentation/screen/login/phone_input_screen.dart';
-import 'package:cakeapp/presentation/screen/main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,8 +15,7 @@ var logger = Logger(
 );
 
 void main() async {
-  // initSplash();
-  WidgetsFlutterBinding.ensureInitialized();
+  initSplash();
   SpUtil.getInstance();
   await Firebase.initializeApp();
   await configureDependencies();
@@ -38,7 +36,7 @@ class MyApp extends StatelessWidget {
         color: Colors.white,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(backgroundColor: Colors.white),
-        home: const MainScreen(),
+        home: const PhoneInputScreen(),
       ),
     );
   }

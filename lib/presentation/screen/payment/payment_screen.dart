@@ -7,6 +7,7 @@ import 'package:cakeapp/presentation/screen/payment/bloc/payment_state.dart';
 import 'package:cakeapp/presentation/utils/gaps.dart';
 import 'package:cakeapp/presentation/utils/utils.dart';
 import 'package:cakeapp/presentation/widgets/common_text_field.dart';
+import 'package:cakeapp/presentation/widgets/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -49,10 +50,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
               children: [
                 _buildTextField(
                     'Name', (name) => _paymentBloc.add(NameChangedEvent(name))),
-                _buildTextField('Phone Number',
-                    (phone) => _paymentBloc.add(NameChangedEvent(phone))),
-                _buildTextField('Location',
-                    (location) => _paymentBloc.add(NameChangedEvent(location))),
+                _buildTextField(
+                    'Phone Number',
+                    (phone) =>
+                        _paymentBloc.add(PhoneNumberChangedEvent(phone))),
+                _buildTextField(
+                    'Location',
+                    (location) =>
+                        _paymentBloc.add(LocationChangedEvent(location))),
                 Gaps.hGap20,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,8 +78,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
           bottomNavigationBar: Material(
             color: const Color(0xffff8906),
             child: InkWell(
-              onTap: () =>
-                  state.name.isNotEmpty ? () => _onPayment(context) : null,
+              onTap: () {
+                state.isValid
+                    ? _showDialogConfirm(context)
+                    : showToast(context, 'All fields must be entered');
+              },
               child: const SizedBox(
                 height: kToolbarHeight,
                 width: double.infinity,
@@ -92,12 +100,35 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
+  void _showDialogConfirm(BuildContext context) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Confirm to Order?'),
+          content: const Text('Are you sure to order items?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => _onPayment(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+
   void _onPayment(BuildContext context) {
+    _paymentBloc.add(OrderEvent(widget.total));
     _cartBloc.add(RemoveAllItemEvent());
-    Navigator.pop(context);
+    showToast(context, "Order Success");
+    Navigator.of(context)
+      ..pop()
+      ..pop()
+      ..pop();
   }
 
-  Widget _buildTextField(String title, callback(String)) => Column(
+  Widget _buildTextField(String title, Function(String) callback) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: Utils.textStyle15),
@@ -106,12 +137,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
             textInputAction: TextInputAction.next,
             styles: Utils.textStyle18,
             onChanged: (value) => callback(value),
-            validator: (nickName) {
-              if (nickName!.isEmpty) {
-                return 'Cant be empty';
-              }
-              return null;
-            },
           ),
           Gaps.hGap20,
         ],

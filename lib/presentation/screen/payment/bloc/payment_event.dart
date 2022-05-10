@@ -33,3 +33,13 @@ class LocationChangedEvent extends PaymentEvent {
   @override
   List<Object> get props => [location];
 }
+
+class OrderEvent extends PaymentEvent {
+  const OrderEvent(this.price);
+
+  final String price;
+
+  @override
+  List<Object> get props => [price];
+}
+

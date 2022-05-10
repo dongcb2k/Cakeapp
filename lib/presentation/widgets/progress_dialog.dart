@@ -1,4 +1,5 @@
 import 'package:cakeapp/presentation/utils/gaps.dart';
+import 'package:cakeapp/presentation/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,10 +15,11 @@ void showToast(BuildContext context, String title) {
   final scaffold = ScaffoldMessenger.of(context);
   scaffold.showSnackBar(
     SnackBar(
-      backgroundColor: const Color(-220299735),
+      backgroundColor: const Color(-10030218),
       content: Text(
         title,
         textAlign: TextAlign.center,
+        style: Utils.textStyle15black,
       ),
       duration: const Duration(seconds: 1),
     ),

@@ -1,3 +1,4 @@
+import 'package:cakeapp/presentation/utils/gaps.dart';
 import 'package:cakeapp/presentation/utils/utils.dart';
 import 'package:cakeapp/presentation/res/colors.dart';
 import 'package:cakeapp/presentation/res/strings.dart';
@@ -59,26 +60,24 @@ class _OtpVerifyViewState extends State<_OtpVerifyView> {
                       color: Colors.white,
                       borderRadius:
                           BorderRadius.only(topLeft: Radius.circular(80.0))),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      const _OtpInputW(),
-                      BlocBuilder<PhoneVerifyBloc, PhoneVerifyState>(
-                        builder: (context, state) {
-                          return CommonButton(
-                            icon: const Text(
-                              'Submit',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
+                  child: BlocBuilder<PhoneVerifyBloc, PhoneVerifyState>(
+                    builder: (context, state) => Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _OtpInputW(phone: state.phone),
+                        CommonButton(
+                          icon: const Text(
+                            'Submit',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
                             ),
-                            label: const Text(''),
-                            onPressed: () => _onSubmitVerify(context, state),
-                          );
-                        },
-                      ),
-                    ],
+                          ),
+                          label: const Text(''),
+                          onPressed: () => _onSubmitVerify(context, state),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               )
@@ -97,37 +96,64 @@ class _OtpVerifyViewState extends State<_OtpVerifyView> {
 }
 
 class _OtpInputW extends StatelessWidget {
-  const _OtpInputW({Key? key}) : super(key: key);
+  const _OtpInputW({Key? key, required this.phone}) : super(key: key);
+
+  final String phone;
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final itemWidth = screenWidth * 0.12;
     final itemHeight = itemWidth * 1.3;
-    return PinCodeTextField(
-      appContext: context,
-      animationType: AnimationType.none,
-      animationDuration: const Duration(milliseconds: 1),
-      length: OTP_LENGTH,
-      mainAxisAlignment: MainAxisAlignment.center,
-      autoFocus: true,
-      cursorColor: Colors.orange,
-      textStyle: Utils.textStyle25,
-      keyboardAppearance: Brightness.light,
-      pinTheme: PinTheme(
-        fieldWidth: itemWidth,
-        fieldHeight: itemHeight,
-        activeColor: Colors.orange,
-        inactiveColor: darkGray,
-        selectedColor: Colors.orange,
-        fieldOuterPadding: const EdgeInsets.all(4),
+    return Column(
+      children: [
+        PinCodeTextField(
+          appContext: context,
+          animationType: AnimationType.none,
+          animationDuration: const Duration(milliseconds: 1),
+          length: OTP_LENGTH,
+          mainAxisAlignment: MainAxisAlignment.center,
+          autoFocus: true,
+          cursorColor: Colors.orange,
+          textStyle: Utils.textStyle25,
+          keyboardAppearance: Brightness.light,
+          pinTheme: PinTheme(
+            fieldWidth: itemWidth,
+            fieldHeight: itemHeight,
+            activeColor: Colors.orange,
+            inactiveColor: darkGray,
+            selectedColor: Colors.orange,
+            fieldOuterPadding: const EdgeInsets.all(4),
+          ),
+          enablePinAutofill: false,
+          keyboardType: TextInputType.number,
+          // focusNode: focusNode,
+          onChanged: (value) {
+            _onChangedOtp(context, value);
+          },
+        ),
+        Gaps.hGap20,
+        const Text(
+          "Don't receive OTP?",
+          style: Utils.textStyle15black,
+        ),
+        _buildButtonResendOtp(context)
+      ],
+    );
+  }
+
+  ButtonTheme _buildButtonResendOtp(BuildContext context) {
+    return ButtonTheme(
+      minWidth: 200,
+      height: 50,
+      child: TextButton(
+        onPressed: () =>
+            context.read<PhoneVerifyBloc>().add(SendOtpSmsEvent(phone)),
+        child: const Text(
+          "Resend OTP",
+          style: Utils.textStyle18orange,
+        ),
       ),
-      enablePinAutofill: false,
-      keyboardType: TextInputType.number,
-      // focusNode: focusNode,
-      onChanged: (value) {
-        _onChangedOtp(context, value);
-      },
     );
   }
 
