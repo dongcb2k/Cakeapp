@@ -11,6 +11,7 @@ class CakeResponse {
     required this.image,
     required this.ingredient,
     required this.price,
+    required this.count,
   });
 
   @JsonKey(name: 'id')
@@ -30,6 +31,9 @@ class CakeResponse {
 
   @JsonKey(name: 'price')
   double price;
+
+  @JsonKey(name: 'count')
+  int? count;
 
   factory CakeResponse.fromJson(Map<String, dynamic> json) => _$CakeResponseFromJson(json);
 

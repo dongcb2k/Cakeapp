@@ -13,6 +13,7 @@ CakeResponse _$CakeResponseFromJson(Map<String, dynamic> json) => CakeResponse(
       image: json['image'] as String,
       ingredient: json['ingredient'] as String,
       price: (json['price'] as num).toDouble(),
+      count: json['count'] as int?,
     );
 
 Map<String, dynamic> _$CakeResponseToJson(CakeResponse instance) =>
@@ -23,4 +24,5 @@ Map<String, dynamic> _$CakeResponseToJson(CakeResponse instance) =>
       'image': instance.image,
       'ingredient': instance.ingredient,
       'price': instance.price,
+      'count': instance.count,
     };

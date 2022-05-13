@@ -13,7 +13,7 @@ abstract class ShopService {
   @factoryMethod
   factory ShopService(@Named('base_url')Dio dio) = _ShopService;
 
-  @GET('95597acb-79d0-44a2-8949-87136ba32a7f')
+  @GET('5eaa7f35-598e-4fa6-b4a8-b14d4f8f6c08')
   Future<List<CakeResponse>> getCakeItem();
 
   @GET('c1c7c80c-3a1b-4bfa-8a9a-93fc7e4b36c4')

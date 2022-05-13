@@ -21,6 +21,7 @@ class _CakeCardState extends State<CakeCard> {
       ingredient: 'With Matcha Powder',
       price: 22,
       category: 'cake',
+      count: 1,
     ),
     CakeResponse(
       id: 11,
@@ -29,6 +30,7 @@ class _CakeCardState extends State<CakeCard> {
       ingredient: 'With Chocolate Powder',
       price: 20,
       category: 'cake',
+      count: 1,
     ),
     CakeResponse(
       id: 7,
@@ -37,6 +39,7 @@ class _CakeCardState extends State<CakeCard> {
       ingredient: 'With Caramel Drizzle',
       price: 14,
       category: 'cake',
+      count: 1,
     ),
     CakeResponse(
       id: 9,
@@ -45,6 +48,7 @@ class _CakeCardState extends State<CakeCard> {
       ingredient: 'With Oat Milk',
       price: 18,
       category: 'cake',
+      count: 1,
     ),
   ];
 

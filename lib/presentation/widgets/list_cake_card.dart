@@ -52,7 +52,7 @@ class _ListCakeCardState extends State<ListCakeCard> {
                       Gaps.wGap10,
                       ImageFromUrl(
                         height: 120,
-                        width: 150,
+                        width: 140,
                         urlImage: data.image,
                       ),
                       Gaps.wGap15,
@@ -108,7 +108,7 @@ class _ListCakeCardState extends State<ListCakeCard> {
                 ],
               ),
             ),
-            Gaps.wGap100,
+            Gaps.wGap75,
             _buildButtonAdd(data, context),
           ],
         ),

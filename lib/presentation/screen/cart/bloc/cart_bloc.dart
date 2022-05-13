@@ -34,13 +34,17 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<GetAllVoucher>(_getAllVoucher);
 
     on<PickVoucherEvent>(_pickVoucher);
+
+    on<IncreaseCount>(_increaseCount);
+
+    on<DecreaseCount>(_decreaseCount);
   }
 
   final GetShopItemUseCase _shopItemUseCase;
   final GetVoucherUseCase _voucherUseCase;
   final LocalData _localData;
 
-  FutureOr<void> _checkAddItemToCart(
+  Future<void> _checkAddItemToCart(
     AddCartEvent event,
     Emitter<CartState> emit,
   ) async {
@@ -68,35 +72,36 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     }
   }
 
-  FutureOr<void> _getAllItemCart(
+  Future<void> _getAllItemCart(
     GetAllCartEvent event,
     Emitter<CartState> emit,
   ) async {
     final listCart = await _localData.getAllCart;
-    var sum = 0.0;
-    for (var cake in listCart!) {
-      sum += cake.price;
-    }
+    double sum = _calculatePrice(listCart);
 
     emit(state.copyWith(listCake: listCart, subPrice: sum));
   }
 
-  FutureOr<void> _removeItemById(
+  Future<void> _removeItemById(
     RemoveItemByIdEvent event,
     Emitter<CartState> emit,
   ) async {
     final id = event.id;
     final List<CakeResponse>? listCake = await _localData.getAllCart;
-    final sum = state.subPrice -
-        listCake!.firstWhere((element) => element.id == id).price;
+    final cake = listCake!.firstWhere((element) => element.id == id);
+    var sum = 0.0;
+
+    if(cake.count != null) {
+      sum = state.subPrice - cake.price * cake.count!.toDouble();
+    }
 
     listCake.removeWhere((element) => element.id == id);
 
-    emit(state.copyWith(listCake: listCake, subPrice: sum));
+    emit(state.copyWith(listCake: listCake, subPrice: sum, freeship: false));
     await _localData.saveItemCart(listCake);
   }
 
-  FutureOr<void> _getAllVoucher(
+  Future<void> _getAllVoucher(
     GetAllVoucher event,
     Emitter<CartState> emit,
   ) async {
@@ -109,10 +114,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     }
   }
 
-  FutureOr<void> _pickVoucher(
+  Future<void> _pickVoucher(
     PickVoucherEvent event,
     Emitter<CartState> emit,
-  ) {
+  ) async {
     final freeShip = event.freeship;
 
     emit(state.copyWith(
@@ -121,5 +126,43 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       description: event.description,
       percent: freeShip ? 0 : event.percent,
     ));
+  }
+
+  Future<void> _increaseCount(
+    IncreaseCount event,
+    Emitter<CartState> emit,
+  ) async {
+    final int index = event.index;
+    final List<CakeResponse>? listCake = await _localData.getAllCart;
+
+    listCake![index].count = listCake[index].count! + 1;
+
+    emit(state.copyWith(
+        listCake: listCake, subPrice: _calculatePrice(listCake), freeship: false));
+    await _localData.saveItemCart(listCake);
+  }
+
+  Future<void> _decreaseCount(
+    DecreaseCount event,
+    Emitter<CartState> emit,
+  ) async {
+    final int index = event.index;
+    final List<CakeResponse>? listCake = await _localData.getAllCart;
+
+    if (listCake![index].count! > 1) {
+      listCake[index].count = listCake[index].count!- 1;
+    }
+
+    emit(state.copyWith(
+        listCake: listCake, subPrice: _calculatePrice(listCake), freeship: false));
+    await _localData.saveItemCart(listCake);
+  }
+
+  double _calculatePrice(List<CakeResponse>? listCart) {
+    var sum = 0.0;
+    for (var cake in listCart!) {
+      sum += cake.price * (cake.count ?? 1);
+    }
+    return sum;
   }
 }

@@ -49,13 +49,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
             child: Column(
               children: [
                 _buildTextField(
-                    'Name', (name) => _paymentBloc.add(NameChangedEvent(name))),
+                    'Name',
+                    false,
+                    (name) => _paymentBloc.add(
+                          NameChangedEvent(name),
+                        )),
                 _buildTextField(
                     'Phone Number',
+                    true,
                     (phone) =>
                         _paymentBloc.add(PhoneNumberChangedEvent(phone))),
                 _buildTextField(
                     'Location',
+                    false,
                     (location) =>
                         _paymentBloc.add(LocationChangedEvent(location))),
                 Gaps.hGap20,
@@ -128,13 +134,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ..pop();
   }
 
-  Widget _buildTextField(String title, Function(String) callback) => Column(
+  Widget _buildTextField(
+          String title, bool isPhone, Function(String) callback) =>
+      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: Utils.textStyle15),
           Gaps.hGap10,
           CommonTextField(
             textInputAction: TextInputAction.next,
+            keyboardType: isPhone ? TextInputType.phone : TextInputType.text,
             styles: Utils.textStyle18,
             onChanged: (value) => callback(value),
           ),

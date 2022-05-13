@@ -43,7 +43,7 @@ class ListSpecialCake extends StatelessWidget {
                       Gaps.wGap10,
                       ImageFromUrl(
                         height: 120,
-                        width: 150,
+                        width: 130,
                         urlImage: data.image,
                       ),
                       Gaps.wGap15,
@@ -99,7 +99,7 @@ class ListSpecialCake extends StatelessWidget {
                 ],
               ),
             ),
-            Gaps.wGap100,
+            Gaps.wGap75,
             _buildButtonAdd(data, context),
           ],
         ),

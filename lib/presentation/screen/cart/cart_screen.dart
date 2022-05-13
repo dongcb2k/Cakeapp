@@ -87,7 +87,7 @@ class _CartScreenState extends State<CartScreen> {
                   padding:
                       const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0),
                   child: ImageFromUrl(
-                      height: 110, width: 110, urlImage: data.image),
+                      height: 100, width: 100, urlImage: data.image),
                 ),
               ),
               Gaps.wGap15,
@@ -102,7 +102,7 @@ class _CartScreenState extends State<CartScreen> {
                       id: data.id,
                     ),
                     Price(price: data.price.toString()),
-                    _buildQuantity(),
+                    _buildQuantity(index, data.count ?? 1),
                   ],
                 ),
               ),
@@ -113,17 +113,25 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  Widget _buildQuantity() {
+  Widget _buildQuantity(
+    int index,
+    int count,
+  ) {
     return Row(
-      children: const [
+      children: [
         IconButton(
-          onPressed: null,
-          icon: Icon(Icons.add_circle, color: Colors.white),
+          onPressed: () => widget._cartBloc.add(DecreaseCount(index)),
+          icon: const Icon(Icons.remove_circle, color: Colors.white),
         ),
-        Text('1', style: TextStyle(color: Colors.white)),
+        Gaps.wGap5,
+        Text(
+          count.toString(),
+          style: Utils.textStyle18,
+        ),
+        Gaps.wGap5,
         IconButton(
-          onPressed: null,
-          icon: Icon(Icons.add_circle, color: Colors.white),
+          onPressed: () => widget._cartBloc.add(IncreaseCount(index)),
+          icon: const Icon(Icons.add_circle, color: Colors.white),
         ),
       ],
     );
@@ -144,12 +152,12 @@ class Price extends StatelessWidget {
           children: [
             const TextSpan(
                 text: r'$ ',
-                style: TextStyle(color: orange, fontSize: textSize18)),
+                style: TextStyle(color: orange, fontSize: textSize20)),
             TextSpan(
               text: price,
               style: const TextStyle(
                   color: Colors.white,
-                  fontSize: textSize18,
+                  fontSize: textSize20,
                   fontWeight: FontWeight.bold),
             ),
           ],
@@ -174,17 +182,14 @@ class Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          width: 160,
-          child: Text(
-            title,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(color: Colors.white, fontSize: textSize18),
-          ),
+        Text(
+          title,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(color: Colors.white, fontSize: textSize18),
         ),
         IconButton(
           onPressed: () => cartBloc.add(RemoveItemByIdEvent(id)),
@@ -316,7 +321,7 @@ class _PaymentState extends State<Payment> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(voucherDes, style: Utils.textStyle18),
+          Text(voucherDes, style: Utils.textStyle15),
           OutlinedButton(
             onPressed: () => _buildPromoDialog(context, list, cartBloc),
             child: const Text('Add', style: Utils.textStyle18),

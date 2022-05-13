@@ -24,7 +24,7 @@ class _ShopService implements ShopService {
     final _result = await _dio.fetch<List<dynamic>>(
         _setStreamType<List<CakeResponse>>(
             Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, '95597acb-79d0-44a2-8949-87136ba32a7f',
+                .compose(_dio.options, '5eaa7f35-598e-4fa6-b4a8-b14d4f8f6c08',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     var value = _result.data!

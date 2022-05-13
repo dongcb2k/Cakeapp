@@ -45,3 +45,35 @@ class PickVoucherEvent extends CartEvent {
         percent,
       ];
 }
+
+class IncreaseCount extends CartEvent {
+  const IncreaseCount(
+    // this.id,
+    this.index,
+  );
+
+  // final int id;
+  final int index;
+
+  @override
+  List<Object> get props => [
+        // id,
+        index,
+      ];
+}
+
+class DecreaseCount extends CartEvent {
+  const DecreaseCount(
+    // this.id,
+    this.index,
+  );
+
+  // final int id;
+  final int index;
+
+  @override
+  List<Object> get props => [
+        // id,
+        index,
+      ];
+}
