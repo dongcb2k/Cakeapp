@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cakeapp/domain/local/local_data.dart';
 import 'package:cakeapp/domain/repository/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,10 +8,9 @@ import 'package:injectable/injectable.dart';
 import 'phone_verify_event.dart';
 import 'phone_verify_state.dart';
 
-@Singleton()
 @injectable
 class PhoneVerifyBloc extends Bloc<PhoneVerifyEvent, PhoneVerifyState> {
-  PhoneVerifyBloc(this._authRepository, this._localData)
+  PhoneVerifyBloc(this._authRepository)
       : super(const PhoneVerifyState()) {
     on<PhoneChangedEvent>(
         (event, emit) => emit(state.copyWith(phone: event.phone)));
@@ -33,7 +31,6 @@ class PhoneVerifyBloc extends Bloc<PhoneVerifyEvent, PhoneVerifyState> {
   }
 
   final AuthRepository _authRepository;
-  final LocalData _localData;
 
   Future<void> _sendOtpEvent(
     SendOtpSmsEvent event,

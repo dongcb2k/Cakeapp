@@ -41,8 +41,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.factory<_i9.UserBloc>(() => _i9.UserBloc(get<_i5.LocalData>()));
   gh.singleton<_i10.AuthRepository>(
       _i11.AuthRepositoryImpl(get<_i5.LocalData>()));
-  gh.singleton<_i12.PhoneVerifyBloc>(
-      _i12.PhoneVerifyBloc(get<_i10.AuthRepository>(), get<_i5.LocalData>()));
+  gh.factory<_i12.PhoneVerifyBloc>(
+      () => _i12.PhoneVerifyBloc(get<_i10.AuthRepository>()));
   gh.singleton<_i13.ShopRepository>(
       _i14.ShopRepositoryImpl(get<_i8.ShopService>()));
   gh.factory<_i15.GetCategoryUseCase>(

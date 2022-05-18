@@ -22,6 +22,8 @@ class PhoneInputScreen extends StatefulWidget {
 }
 
 class _PhoneInputScreenState extends State<PhoneInputScreen> {
+  final _phoneBloc = sl<PhoneVerifyBloc>();
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +37,7 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
       resizeToAvoidBottomInset: false,
       backgroundColor: backgroundColor,
       body: BlocProvider(
-        create: (context) => sl<PhoneVerifyBloc>(),
+        create: (context) => _phoneBloc,
         child: SafeArea(
           child: Column(
             children: [
@@ -61,8 +63,6 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
   }
 
   Widget _buildTextField(BuildContext context) {
-    final _verifyBloc = context.read<PhoneVerifyBloc>();
-
     return Container(
       padding: const EdgeInsets.only(
         top: 50,
@@ -70,7 +70,7 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
         right: 35,
       ),
       child: BlocBuilder<PhoneVerifyBloc, PhoneVerifyState>(
-        bloc: _verifyBloc,
+        bloc: _phoneBloc,
         builder: (context, state) {
           if (state.isLoading) {
             return const Center(
@@ -80,7 +80,7 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildPhoneInput(_verifyBloc),
+              _buildPhoneInput(_phoneBloc),
               Gaps.hGap25,
               BlocBuilder<PhoneVerifyBloc, PhoneVerifyState>(
                 buildWhen: (previous, current) =>
@@ -92,7 +92,7 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
                     color: Colors.white,
                   ),
                   onPressed: () => state.phone.length == PHONE_LENGTH
-                      ? _onVerifyPhone(_verifyBloc, state, context)
+                      ? _onVerifyPhone(_phoneBloc, state, context)
                       : null,
                 ),
               ),
